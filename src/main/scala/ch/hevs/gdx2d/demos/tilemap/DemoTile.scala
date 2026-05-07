@@ -53,10 +53,10 @@ class DemoTile extends DesktopApplication {
   override def onKeyDown(keycode: Int): Unit = {
     super.onKeyDown(keycode)
     keycode match {
-      case Input.Keys.UP    => position.add(0f, -32f)
-      case Input.Keys.DOWN  => position.add(0f, 32f)
-      case Input.Keys.LEFT  => position.add(32f, 0f)
-      case Input.Keys.RIGHT => position.add(-32f, 0f)
+      case Input.Keys.DOWN    => position.add(0f, -32f)
+      case Input.Keys.UP  => position.add(0f, 32f)
+      case Input.Keys.RIGHT  => position.add(32f, 0f)
+      case Input.Keys.LEFT => position.add(-32f, 0f)
       case _ => ()
     }
   }
