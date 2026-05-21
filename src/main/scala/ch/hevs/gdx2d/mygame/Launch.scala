@@ -7,6 +7,7 @@ import ch.hevs.gdx2d.desktop.DesktopApplication
 import ch.hevs.gdx2d.desktop.physics.DebugRenderer
 import ch.hevs.gdx2d.lib.GdxGraphics
 import ch.hevs.gdx2d.lib.physics.PhysicsWorld
+import ch.hevs.gdx2d.mygame.T2DCar
 import com.badlogic.gdx.{Gdx, Input}
 import com.badlogic.gdx.graphics.{Color, Texture}
 import com.badlogic.gdx.math.Vector2
@@ -21,10 +22,9 @@ class Launch extends DesktopApplication(1920, 1080) {
 
   private var dbgRenderer: DebugRenderer = _
   private var world: World = _
-  private var c1: Car = _
+  private var c1: T2DCar = _
 
   override def onInit(): Unit = {
-    setTitle("Simple image drawing, mui 2013")
     imgBitmap = new BitmapImage("src/main/scala/ch/hevs/gdx2d/mygame/res/image.png")
 
     world = PhysicsWorld.getInstance()
@@ -33,44 +33,37 @@ class Launch extends DesktopApplication(1920, 1080) {
     dbgRenderer = new DebugRenderer()
 
     new PhysicsScreenBoundaries(getWindowWidth.toFloat, getWindowHeight.toFloat)
-
-    c1 = new Car(30f, 70f, new Vector2(200f, 200f), math.Pi.toFloat, 10f, 30f, 15f)
+    c1 = new T2DCar(new Vector2(getWindowWidth / 2f, getWindowHeight / 2f))
   }
 
   override def onGraphicRender(g: GdxGraphics): Unit = {
-    g.drawBackground(imgBitmap,0,0)
-
+    g.clear()
     PhysicsWorld.updatePhysics(Gdx.graphics.getDeltaTime)
 
-    if (Gdx.input.isKeyPressed(Input.Keys.DPAD_UP)) {
-      c1.accelerate = true
-    } else if (Gdx.input.isKeyPressed(Input.Keys.DPAD_DOWN)) {
-      c1.brake = true
-    } else {
-      c1.accelerate = false
-      c1.brake = false
-    }
-
-    if (Gdx.input.isKeyPressed(Input.Keys.DPAD_LEFT)) {
-      c1.steer_left = true
-      c1.steer_right = false
-    } else if (Gdx.input.isKeyPressed(Input.Keys.DPAD_RIGHT)) {
-      c1.steer_right = true
-      c1.steer_left = false
-    } else {
-      c1.steer_left = false
-      c1.steer_right = false
-    }
-
-    c1.update(Gdx.graphics.getDeltaTime)
+    dbgRenderer.render(PhysicsWorld.getInstance(), g.getCamera.combined)
     c1.draw(g)
+  }
 
-    dbgRenderer.render(world, g.getCamera.combined)
+  override def onKeyUp(keycode: Int): Unit = {
+    keycode match {
+      case Input.Keys.LEFT  => c1.driftLeft = false
+      case Input.Keys.RIGHT => c1.driftRight = false
+      case Input.Keys.UP    => c1.driveUp = 0f
+      case _ => ()
+    }
+  }
 
+  override def onKeyDown(keycode: Int): Unit = {
+    keycode match {
+      case Input.Keys.LEFT  => c1.driftLeft = true
+      case Input.Keys.RIGHT => c1.driftRight = true
+      case Input.Keys.UP    => c1.driveUp = T2DCar.MAX_THRUST
+      case _ => ()
+    }
   }
 }
 
-object HelloGdx2d {
+object Launch {
   def main(args: Array[String]): Unit = {
     new Launch().launch()
   }
