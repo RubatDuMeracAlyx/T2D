@@ -22,6 +22,7 @@ class Launch extends DesktopApplication(1920, 1080) {
   val assets: GameAssets = new GameAssets
   val mapsManager: MapsManager = new MapsManager
   private var c1: T2DCar = _
+  var valor_zoom = 1.5f
 
   override def onInit(): Unit = {
     setTitle("RACE")
@@ -44,8 +45,8 @@ class Launch extends DesktopApplication(1920, 1080) {
     c1.draw(g)
 
     val camera: OrthographicCamera = g.getCamera
-    camera.position.scl(1, 1, 0)
-    g.zoom(0.5f)
+    g.moveCamera(c1.box.getBodyPosition.x-(1920/2*valor_zoom),c1.box.getBodyPosition.y-(1080/2*valor_zoom))
+    g.zoom(valor_zoom)
     camera.update()
 
     mapsManager.render(camera)
