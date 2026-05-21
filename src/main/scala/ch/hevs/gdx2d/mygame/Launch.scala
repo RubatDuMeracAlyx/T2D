@@ -7,32 +7,33 @@ import ch.hevs.gdx2d.desktop.DesktopApplication
 import ch.hevs.gdx2d.desktop.physics.DebugRenderer
 import ch.hevs.gdx2d.lib.GdxGraphics
 import ch.hevs.gdx2d.lib.physics.PhysicsWorld
+import ch.hevs.gdx2d.mygame.GameAssets
+import com.badlogic.gdx.Input.Keys
 import ch.hevs.gdx2d.mygame.T2DCar
 import com.badlogic.gdx.{Gdx, Input}
-import com.badlogic.gdx.graphics.{Color, Texture}
+import com.badlogic.gdx.graphics.{Color, OrthographicCamera, Texture}
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.World
-
+import ch.hevs.gdx2d.mygame.MapsManager
 
 class Launch extends DesktopApplication(1920, 1080) {
 
-
-  protected var counter: Float = 0f
-  protected var imgBitmap: BitmapImage = _
-
-  private var dbgRenderer: DebugRenderer = _
   private var world: World = _
+  val assets: GameAssets = new GameAssets
+  val mapsManager: MapsManager = new MapsManager
   private var c1: T2DCar = _
 
   override def onInit(): Unit = {
-    imgBitmap = new BitmapImage("src/main/scala/ch/hevs/gdx2d/mygame/res/image.png")
+    setTitle("RACE")
+
+    assets.loadAll()
+    assets.manager.finishLoading()
 
     world = PhysicsWorld.getInstance()
     world.setGravity(new Vector2(0f, 0f))
 
-    dbgRenderer = new DebugRenderer()
-
-    new PhysicsScreenBoundaries(getWindowWidth.toFloat, getWindowHeight.toFloat)
+    val loadedMap = assets.getMap()
+    mapsManager.load(loadedMap)
     c1 = new T2DCar(new Vector2(getWindowWidth / 2f, getWindowHeight / 2f))
   }
 
@@ -40,8 +41,15 @@ class Launch extends DesktopApplication(1920, 1080) {
     g.clear()
     PhysicsWorld.updatePhysics(Gdx.graphics.getDeltaTime)
 
-    dbgRenderer.render(PhysicsWorld.getInstance(), g.getCamera.combined)
     c1.draw(g)
+
+    val camera: OrthographicCamera = g.getCamera
+    camera.position.scl(1, 1, 0)
+    g.zoom(0.5f)
+    camera.update()
+
+    mapsManager.render(camera)
+
   }
 
   override def onKeyUp(keycode: Int): Unit = {

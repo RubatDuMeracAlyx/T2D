@@ -18,7 +18,7 @@ import com.badlogic.gdx.math.Vector2
 class Car(width: Float, length: Float, position: Vector2, angle: Float,
           protected val power: Float, protected val maxSteerAngle: Float, protected val maxSpeed: Float) extends DrawableObject {
 
-  private val wheelWidth = 16
+  private val wheelWidth = 10
   private val wheelHeight = 60
 
   var steer_left: Boolean = false
