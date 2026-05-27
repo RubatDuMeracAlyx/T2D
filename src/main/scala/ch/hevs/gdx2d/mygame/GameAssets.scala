@@ -59,7 +59,7 @@ class GameAssets extends Disposable {
           y * tileHeight + tileHeight / 2f
         )
 
-        allSpawn.addOne(position)
+        allSpawn.append(position)
       }
     }
     allSpawn
@@ -90,7 +90,7 @@ class GameAssets extends Disposable {
 
         val box = new PhysicsStaticBox("", position, tileWidth, tileHeight, math.toRadians(90.0).toFloat)
 
-        allHitBox.addOne(box)
+        allHitBox.append(box)
       }
     }
     println(allHitBox.mkString)

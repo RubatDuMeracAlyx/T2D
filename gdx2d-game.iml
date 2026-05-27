@@ -12,5 +12,6 @@
     <orderEntry type="library" name="accordion" level="project" />
     <orderEntry type="library" name="scala-sdk-2.13.16" level="application" />
     <orderEntry type="library" name="scala-sdk-2.13.18" level="application" />
+    <orderEntry type="library" name="scala-sdk-2.12.21" level="application" />
   </component>
 </module>
