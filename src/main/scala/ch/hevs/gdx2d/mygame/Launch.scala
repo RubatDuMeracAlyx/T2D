@@ -25,7 +25,9 @@ class Launch extends DesktopApplication(1920, 1080) {
   var valor_zoom = 1.5f
 
   override def onInit(): Unit = {
-    setTitle("RACE")
+    setTitle("RACETEST")
+
+
 
     assets.loadAll()
     assets.manager.finishLoading()
