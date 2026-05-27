@@ -37,8 +37,33 @@ class GameAssets extends Disposable {
   //  val roadLayer = map.getLayers.get("road").asInstanceOf[TiledMapTileLayer]
   //  val sandLayer = map.getLayers.get("sand").asInstanceOf[TiledMapTileLayer]
   //  val checkpointLayer = map.getLayers.get("checkpoint").asInstanceOf[TiledMapTileLayer]
-  //  val finishLayer = map.getLayers.get("finish").asInstanceOf[TiledMapTileLayer]
 
+
+  def spawnPlacementForTheCar(): ArrayBuffer[Vector2] = {
+
+    val map: TiledMap = new TmxMapLoader().load(MAP_PATH)
+    val finishLayer = map.getLayers.get("finish").asInstanceOf[TiledMapTileLayer]
+    val allSpawn: ArrayBuffer[Vector2] = ArrayBuffer.empty
+
+    val mapWidth = finishLayer.getWidth
+    val mapHeight = finishLayer.getHeight
+    val tileWidth = finishLayer.getTileWidth
+    val tileHeight = finishLayer.getTileHeight
+
+    for (x <- 0 until mapWidth; y <- 0 until mapHeight) {
+      val cell = finishLayer.getCell(x, y)
+      if (cell != null) {
+
+        val position = new Vector2(
+          x * tileWidth + tileWidth / 2f,
+          y * tileHeight + tileHeight / 2f
+        )
+
+        allSpawn.addOne(position)
+      }
+    }
+    allSpawn
+  }
 
   def generateHitBoxes(): ArrayBuffer[PhysicsStaticBox] = {
     val map : TiledMap = new TmxMapLoader().load(MAP_PATH)

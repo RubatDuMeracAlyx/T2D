@@ -27,6 +27,7 @@ class Launch extends DesktopApplication(1920, 1080) {
   private var hitboxes: ArrayBuffer[PhysicsStaticBox] = _
   var zoom = 2f
 
+
   override def onInit(): Unit = {
     setTitle("RACE")
 
@@ -40,7 +41,9 @@ class Launch extends DesktopApplication(1920, 1080) {
     val loadedMap = assets.getMap()
     mapsManager.load(loadedMap)
     hitboxes = assets.generateHitBoxes() // résultat stocké
-    c1 = new T2DCar(new Vector2(getWindowWidth / 2f, getWindowHeight / 2f))
+    new PhysicsScreenBoundaries(getWindowWidth.toFloat, getWindowHeight.toFloat)
+
+    c1 = new T2DCar(new Vector2(assets.spawnPlacementForTheCar()(0)))
   }
 
   override def onGraphicRender(g: GdxGraphics): Unit = {
