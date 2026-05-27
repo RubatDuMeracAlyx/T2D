@@ -29,7 +29,9 @@ class Launch extends DesktopApplication(1920, 1080) {
   var valor_zoom = 1.5f
 
   override def onInit(): Unit = {
-    setTitle("RACE")
+    setTitle("RACETEST")
+
+
 
     assets.loadAll()
     assets.manager.finishLoading()
@@ -49,8 +51,8 @@ class Launch extends DesktopApplication(1920, 1080) {
     c1.draw(g)
 
     val camera: OrthographicCamera = g.getCamera
-    g.moveCamera(c1.box.getBodyPosition.x-(1920/2*valor_zoom),c1.box.getBodyPosition.y-(1080/2*valor_zoom))
-    g.zoom(valor_zoom)
+    camera.position.scl(1, 1, 0)
+    g.zoom(0.5f)
     camera.update()
 
     mapsManager.render(camera)
