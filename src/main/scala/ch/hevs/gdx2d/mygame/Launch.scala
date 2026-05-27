@@ -16,6 +16,7 @@ import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.World
 import ch.hevs.gdx2d.mygame.MapsManager
 import com.badlogic.gdx.scenes.scene2d.Stage
+import com.badlogic.gdx.scenes.scene2d.ui.SelectBox.SelectBoxStyle
 import com.badlogic.gdx.scenes.scene2d.ui.{SelectBox, Skin, TextButton}
 
 import scala.collection.SeqView.DropRight
@@ -80,15 +81,18 @@ class Launch extends DesktopApplication(1920, 1080) {
 class Menu extends DesktopApplication(1920, 1080) {
   private var stage: Stage = _
   private var newGameButton: TextButton = _
-  private var MapChoice: SelectBox[TextButton] = _
-  private var PlayerChoice: SelectBox[TextButton] = _
+  private var MapChoice: SelectBox[Int] = _
+  private var PlayerChoice: SelectBox[Int] = _
   private var skin: Skin = _
-
+  val boxStyle = new SelectBoxStyle()
 
 
   override def onInit(): Unit = {
     val buttonWidth = 180f
     val buttonHeight = 30f
+    val selectboxWidth = 200f
+    val  selectboxHeight = 50f
+
 
     setTitle("Menu")
 
@@ -97,21 +101,38 @@ class Menu extends DesktopApplication(1920, 1080) {
 
     skin = new Skin(Gdx.files.internal("ui/uiskin.json"))
 
-    newGameButton = new TextButton("Click me", skin)
+    newGameButton = new TextButton("New game", skin)
     newGameButton.setWidth(buttonWidth)
     newGameButton.setHeight(buttonHeight)
 
-    MapChoice = new SelectBox[TextButton](skin)
-    MapChoice.setWidth(buttonWidth)
-    MapChoice.setHeight(buttonHeight)
+    MapChoice = new SelectBox[Int](skin)
+    MapChoice.setWidth(selectboxWidth)
+    MapChoice.setHeight(selectboxHeight)
 
-    PlayerChoice = new SelectBox[TextButton](skin)
-    PlayerChoice.setWidth(buttonWidth)
-    PlayerChoice.setHeight(buttonHeight)
+    PlayerChoice = new SelectBox[Int](skin)
+    PlayerChoice.setWidth(selectboxWidth+100)
+    PlayerChoice.setHeight(selectboxHeight+50)
 
+    MapChoice.setMaxListCount(2)
+    PlayerChoice.setMaxListCount(4)
+
+    MapChoice.setItems(1,2)
+    PlayerChoice.setItems(1,2,3,4)
+
+
+
+    // Set la position des bouton
+    newGameButton.setPosition(getWindowWidth / 2f - buttonWidth / 2f, getWindowHeight * 0.6f)
+    MapChoice.setPosition(getWindowWidth / 2f - buttonWidth / 2f, getWindowHeight * 0.4f)
+    PlayerChoice.setPosition(getWindowWidth / 2f - buttonWidth / 2f, getWindowHeight * 0.7f)
+
+    // ajouter les boutons au stage (la fenetre)
+    stage.addActor(newGameButton)
+    stage.addActor(MapChoice)
+    stage.addActor(PlayerChoice)
   }
   override def onGraphicRender(g: GdxGraphics): Unit = {
-    g.clear(Color.BLACK)
+    g.clear(Color.FIREBRICK)
 
     stage.act()
     stage.draw()
@@ -132,7 +153,7 @@ class Menu extends DesktopApplication(1920, 1080) {
 
 object Launch {
   def main(args: Array[String]): Unit = {
-    new Menu().launch()
-   // new Launch().launch()
+   // new Menu().launch()
+    new Launch().launch()
   }
 }
