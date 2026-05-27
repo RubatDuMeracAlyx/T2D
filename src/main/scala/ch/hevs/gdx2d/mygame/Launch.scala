@@ -15,6 +15,10 @@ import com.badlogic.gdx.graphics.{Color, OrthographicCamera, Texture}
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.World
 import ch.hevs.gdx2d.mygame.MapsManager
+import com.badlogic.gdx.scenes.scene2d.Stage
+import com.badlogic.gdx.scenes.scene2d.ui.{SelectBox, Skin, TextButton}
+
+import scala.collection.SeqView.DropRight
 
 class Launch extends DesktopApplication(1920, 1080) {
 
@@ -71,9 +75,62 @@ class Launch extends DesktopApplication(1920, 1080) {
     }
   }
 }
+class Menu extends DesktopApplication(1920, 1080) {
+  private var stage: Stage = _
+  private var newGameButton: TextButton = _
+  private var MapChoice: SelectBox[TextButton] = _
+  private var PlayerChoice: SelectBox[TextButton] = _
+  private var skin: Skin = _
+
+
+
+  override def onInit(): Unit = {
+    val buttonWidth = 180f
+    val buttonHeight = 30f
+
+    setTitle("Menu")
+
+    stage = new Stage()
+    Gdx.input.setInputProcessor(stage)
+
+    skin = new Skin(Gdx.files.internal("ui/uiskin.json"))
+
+    newGameButton = new TextButton("Click me", skin)
+    newGameButton.setWidth(buttonWidth)
+    newGameButton.setHeight(buttonHeight)
+
+    MapChoice = new SelectBox[TextButton](skin)
+    MapChoice.setWidth(buttonWidth)
+    MapChoice.setHeight(buttonHeight)
+
+    PlayerChoice = new SelectBox[TextButton](skin)
+    PlayerChoice.setWidth(buttonWidth)
+    PlayerChoice.setHeight(buttonHeight)
+
+  }
+  override def onGraphicRender(g: GdxGraphics): Unit = {
+    g.clear(Color.BLACK)
+
+    stage.act()
+    stage.draw()
+
+    g.drawStringCentered(getWindowHeight / 4f, s"Button status ${newGameButton.isChecked}")
+    g.drawSchoolLogo()
+    g.drawFPS()
+  }
+  override def onDispose(): Unit = {
+    super.onDispose()
+    stage.dispose()
+    skin.dispose()
+  }
+
+
+
+}
 
 object Launch {
   def main(args: Array[String]): Unit = {
-    new Launch().launch()
+    new Menu().launch()
+   // new Launch().launch()
   }
 }
