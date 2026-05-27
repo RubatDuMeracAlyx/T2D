@@ -5,11 +5,11 @@ import ch.hevs.gdx2d.components.physics.primitives.PhysicsBox
 import ch.hevs.gdx2d.lib.GdxGraphics
 import com.badlogic.gdx.math.Vector2
 
-class T2DCar(position: Vector2){
+class T2DCar(var position: Vector2){
   var accelerate: Boolean = false
 
-  private val box = new PhysicsBox("car", position, 30f, 30f, math.toRadians(90.0).toFloat)
-  private val carImage = new BitmapImage("src/main/scala/ch/hevs/gdx2d/mygame/res/car_bin.png")
+  val box = new PhysicsBox("car", position, 150f, 45f, math.toRadians(90.0).toFloat)
+  private val carImage = new BitmapImage("data/res/CARS/REDCAR/redCar.png")
   var driveUp = 0f
   var driftLeft = false
   var driftRight = false
@@ -35,8 +35,8 @@ class T2DCar(position: Vector2){
 }
 
 object T2DCar {
-  val MAX_THRUST = 1f
-  val MAX_TORQUE = 0.04f
+  val MAX_THRUST = 5f
+  val MAX_TORQUE = 1f
 }
 
 

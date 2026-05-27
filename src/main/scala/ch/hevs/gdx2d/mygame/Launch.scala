@@ -1,6 +1,7 @@
 package ch.hevs.gdx2d.hello
 
 import ch.hevs.gdx2d.components.bitmaps.BitmapImage
+import ch.hevs.gdx2d.components.physics.primitives.PhysicsStaticBox
 import ch.hevs.gdx2d.components.physics.utils.PhysicsScreenBoundaries
 import ch.hevs.gdx2d.demos.physics.car.components.Car
 import ch.hevs.gdx2d.desktop.DesktopApplication
@@ -15,6 +16,7 @@ import com.badlogic.gdx.graphics.{Color, OrthographicCamera, Texture}
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.World
 import ch.hevs.gdx2d.mygame.MapsManager
+import scala.collection.mutable.ArrayBuffer
 
 class Launch extends DesktopApplication(1920, 1080) {
 
@@ -22,6 +24,8 @@ class Launch extends DesktopApplication(1920, 1080) {
   val assets: GameAssets = new GameAssets
   val mapsManager: MapsManager = new MapsManager
   private var c1: T2DCar = _
+  private var hitboxes: ArrayBuffer[PhysicsStaticBox] = _
+  var zoom = 2f
 
   override def onInit(): Unit = {
     setTitle("RACE")
@@ -29,11 +33,13 @@ class Launch extends DesktopApplication(1920, 1080) {
     assets.loadAll()
     assets.manager.finishLoading()
 
+
     world = PhysicsWorld.getInstance()
     world.setGravity(new Vector2(0f, 0f))
 
     val loadedMap = assets.getMap()
     mapsManager.load(loadedMap)
+    hitboxes = assets.generateHitBoxes() // résultat stocké
     c1 = new T2DCar(new Vector2(getWindowWidth / 2f, getWindowHeight / 2f))
   }
 
@@ -44,8 +50,8 @@ class Launch extends DesktopApplication(1920, 1080) {
     c1.draw(g)
 
     val camera: OrthographicCamera = g.getCamera
-    camera.position.scl(1, 1, 0)
-    g.zoom(0.5f)
+    g.moveCamera(c1.box.getBodyPosition.x-1920/2*zoom,c1.box.getBodyPosition.y-1080/2*zoom)
+    g.zoom(zoom)
     camera.update()
 
     mapsManager.render(camera)
