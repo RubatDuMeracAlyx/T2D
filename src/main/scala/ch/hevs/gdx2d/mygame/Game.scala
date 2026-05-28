@@ -59,6 +59,8 @@ class Game(var number_player: Int, var map_name: String) extends DesktopApplicat
       case Input.Keys.LEFT => c1.driftLeft = false
       case Input.Keys.RIGHT => c1.driftRight = false
       case Input.Keys.UP => c1.driveUp = 0f
+      case Input.Keys.DOWN => c1.driveDown = 0f
+      case Input.Keys.SPACE => c1.boost = false
       case _ => ()
     }
   }
@@ -68,6 +70,8 @@ class Game(var number_player: Int, var map_name: String) extends DesktopApplicat
       case Input.Keys.LEFT => c1.driftLeft = true
       case Input.Keys.RIGHT => c1.driftRight = true
       case Input.Keys.UP => c1.driveUp = T2DCar.MAX_THRUST
+      case Input.Keys.DOWN => c1.driveDown = T2DCar.MAX_THRUST
+      case Input.Keys.SPACE => c1.boost = true
       case _ => ()
     }
   }

@@ -136,7 +136,7 @@ class Menu() extends DesktopApplication(1920, 1080) {
 
 object Menu {
   def main(args: Array[String]): Unit = {
-    new Menu().launch()
+    new Game(2,"67").launch()
 
   }
 }
