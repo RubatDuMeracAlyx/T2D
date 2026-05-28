@@ -8,6 +8,7 @@ import ch.hevs.gdx2d.desktop.DesktopApplication
 import ch.hevs.gdx2d.desktop.physics.DebugRenderer
 import ch.hevs.gdx2d.lib.GdxGraphics
 import ch.hevs.gdx2d.lib.physics.PhysicsWorld
+import ch.hevs.gdx2d.lib.utils.Logger
 import ch.hevs.gdx2d.mygame.GameAssets
 import com.badlogic.gdx.Input.Keys
 import ch.hevs.gdx2d.mygame.T2DCar
@@ -16,6 +17,12 @@ import com.badlogic.gdx.graphics.{Color, OrthographicCamera, Texture}
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.World
 import ch.hevs.gdx2d.mygame.MapsManager
+import com.badlogic.gdx.scenes.scene2d.{InputEvent, Stage}
+import com.badlogic.gdx.scenes.scene2d.ui.SelectBox.SelectBoxStyle
+import com.badlogic.gdx.scenes.scene2d.ui.{Label, SelectBox, Skin, TextButton}
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
+
+import scala.collection.SeqView.DropRight
 import scala.collection.mutable.ArrayBuffer
 
 class Launch extends DesktopApplication(1920, 1080) {
@@ -33,7 +40,6 @@ class Launch extends DesktopApplication(1920, 1080) {
 
     assets.loadAll()
     assets.manager.finishLoading()
-
 
     world = PhysicsWorld.getInstance()
     world.setGravity(new Vector2(0f, 0f))
@@ -79,9 +85,125 @@ class Launch extends DesktopApplication(1920, 1080) {
     }
   }
 }
+class Menu() extends DesktopApplication(1920, 1080) {
+  private var stage: Stage = _
+  private var newGameButton: TextButton = _
+  private var MapChoice: SelectBox[Int] = _
+  private var PlayerChoice: SelectBox[Int] = _
+  private var skin: Skin = _
+  private var labelmap : Label = _
+  private var labelplayer : Label = _
+  val boxStyle = new SelectBoxStyle()
+
+
+
+  override def onInit(): Unit = {
+    val buttonWidth = 180f
+    val buttonHeight = 30f
+    val selectboxWidth = 200f
+    val  selectboxHeight = 50f
+
+
+    setTitle("Menu")
+
+    stage = new Stage()
+    Gdx.input.setInputProcessor(stage)
+
+    skin = new Skin(Gdx.files.internal("ui/uiskin.json"))
+
+    newGameButton = new TextButton("New game", skin)
+    newGameButton.setWidth(buttonWidth)
+    newGameButton.setHeight(buttonHeight)
+
+    labelmap = new Label("Choose the map", skin)
+    labelmap.setWidth(buttonWidth)
+    labelmap.setHeight(buttonHeight)
+
+    labelplayer = new Label("How many player", skin)
+    labelplayer.setWidth(buttonWidth)
+    labelplayer.setHeight(buttonHeight)
+
+    MapChoice = new SelectBox[Int](skin)
+    MapChoice.setWidth(selectboxWidth)
+    MapChoice.setHeight(selectboxHeight)
+
+    PlayerChoice = new SelectBox[Int](skin)
+    PlayerChoice.setWidth(selectboxWidth+100)
+    PlayerChoice.setHeight(selectboxHeight)
+
+    MapChoice.setName("Choose the map")
+    PlayerChoice.setName("Choose how many player")
+
+
+
+    MapChoice.setMaxListCount(2)
+    PlayerChoice.setMaxListCount(4)
+
+    MapChoice.setItems(1,2)
+    PlayerChoice.setItems(1,2,3,4)
+
+
+
+    // Set la position des bouton
+    newGameButton.setPosition(getWindowWidth / 2f - buttonWidth / 2f, getWindowHeight * 0.6f)
+    MapChoice.setPosition(getWindowWidth / 2f - buttonWidth / 2f, getWindowHeight * 0.4f)
+    PlayerChoice.setPosition(getWindowWidth / 2f - buttonWidth / 2f, getWindowHeight * 0.7f)
+    labelmap.setPosition(getWindowWidth / 2f - buttonWidth / 2f, getWindowHeight * 0.7f+50)
+    labelplayer.setPosition(getWindowWidth / 2f - buttonWidth / 2f, getWindowHeight * 0.4f+50)
+
+
+
+    // ajouter les boutons au stage (la fenetre)
+
+    stage.addActor(newGameButton)
+    stage.addActor(MapChoice)
+    stage.addActor(PlayerChoice)
+    stage.addActor(labelmap)
+    stage.addActor(labelplayer)
+
+    newGameButton.addListener(new ClickListener() {
+      override def clicked(event: InputEvent, x: Float, y: Float): Unit = {
+        //Logger.log("Button is checked")
+        //new Launch().launch()
+        new Thread(() => {
+          Thread.sleep(100)
+          new Launch().launch()
+        }).start()
+        Gdx.app.exit()
+
+      }
+    })
+  }
+
+  override def onGraphicRender(g: GdxGraphics): Unit = {
+
+      g.clear(Color.FIREBRICK)
+
+      stage.act()
+      stage.draw()
+
+
+      g.drawSchoolLogo()
+      g.drawFPS()
+
+  }
+  override def onDispose(): Unit = {
+
+      super.onDispose()
+      stage.dispose()
+      skin.dispose()
+
+  }
+
+
+
+
+
+}
 
 object Launch {
   def main(args: Array[String]): Unit = {
-    new Launch().launch()
+    new Menu().launch()
+    //new Launch().launch()
   }
 }
