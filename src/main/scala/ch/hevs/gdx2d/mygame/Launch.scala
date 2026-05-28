@@ -131,14 +131,12 @@ class Menu() extends DesktopApplication(1920, 1080) {
     PlayerChoice.setWidth(selectboxWidth+100)
     PlayerChoice.setHeight(selectboxHeight)
 
-    MapChoice.setName("Choose the map")
-    PlayerChoice.setName("Choose how many player")
 
-
-
+    //nombre de choix des selectbox
     MapChoice.setMaxListCount(2)
     PlayerChoice.setMaxListCount(4)
 
+    //choix en question
     MapChoice.setItems(1,2)
     PlayerChoice.setItems(1,2,3,4)
 
@@ -161,27 +159,24 @@ class Menu() extends DesktopApplication(1920, 1080) {
     stage.addActor(labelmap)
     stage.addActor(labelplayer)
 
+    // Quand newGame est cliquer il quitte la page menu attend puis lance la game
     newGameButton.addListener(new ClickListener() {
       override def clicked(event: InputEvent, x: Float, y: Float): Unit = {
-        //Logger.log("Button is checked")
-        //new Launch().launch()
+        Gdx.app.exit()
         new Thread(() => {
           Thread.sleep(100)
           new Launch().launch()
         }).start()
-        Gdx.app.exit()
 
       }
     })
   }
 
   override def onGraphicRender(g: GdxGraphics): Unit = {
-
-      g.clear(Color.FIREBRICK)
+       g.clear(Color.FIREBRICK)
 
       stage.act()
       stage.draw()
-
 
       g.drawSchoolLogo()
       g.drawFPS()
@@ -204,6 +199,6 @@ class Menu() extends DesktopApplication(1920, 1080) {
 object Launch {
   def main(args: Array[String]): Unit = {
     new Menu().launch()
-    //new Launch().launch()
+
   }
 }
