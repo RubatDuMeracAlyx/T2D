@@ -15,21 +15,27 @@ class T2DCar(var position: Vector2){
   var driftRight = false
 
   def draw(g: GdxGraphics): Unit = {
+    //DRIFT LEFT AND RIGHT //has to diminish with the speed -> max is when the car goes full speed and you have to be unable to turn when speed is 0
+
+    //calculate speed of the car
+    println(box.getBodyLinearVelocity)
+
+
     if (driftLeft) box.applyBodyTorque(T2DCar.MAX_TORQUE, true)
     if (driftRight) box.applyBodyTorque(-T2DCar.MAX_TORQUE, true)
 
+    //goes forward with the angle the car is at
+
+    //calculate ratio beetween the two thing
     box.applyBodyForceToCenter(
-      math.cos(box.getBodyAngle.toDouble).toFloat * driveUp,
-      math.sin(box.getBodyAngle.toDouble).toFloat * driveUp,
+      math.cos(box.getBodyAngle.toDouble).toFloat * driveUp-T2DCar.DRAG,
+      math.sin(box.getBodyAngle.toDouble).toFloat * driveUp-T2DCar.DRAG,
       true)
 
+    //position of the car
     val pos = box.getBodyPosition
 
-    if (driveUp > 0) {
-      val x = box.getBody.getWorldPoint(new Vector2(-55.0f * 0.02f, 0.0f)) // simplified world point calc
-      g.drawTransformedPicture(pos.x, pos.y, box.getBodyAngleDeg, .3f, carImage)
-    }
-
+    //apply the speed
     g.drawTransformedPicture(pos.x, pos.y, box.getBodyAngleDeg, .5f, carImage)
   }
 }
@@ -37,6 +43,7 @@ class T2DCar(var position: Vector2){
 object T2DCar {
   val MAX_THRUST = 5f
   val MAX_TORQUE = 1f
+  val DRAG = 1f
 }
 
 
