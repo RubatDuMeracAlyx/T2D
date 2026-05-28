@@ -25,7 +25,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import scala.collection.SeqView.DropRight
 import scala.collection.mutable.ArrayBuffer
 
-class Launch extends DesktopApplication(1920, 1080) {
+class Game(var number_player: Int, var map_name: String) extends DesktopApplication(1920, 1080) {
 
   private var world: World = _
   val assets: GameAssets = new GameAssets
@@ -59,7 +59,7 @@ class Launch extends DesktopApplication(1920, 1080) {
     c1.draw(g)
 
     val camera: OrthographicCamera = g.getCamera
-    g.moveCamera(c1.box.getBodyPosition.x-1920/2*zoom,c1.box.getBodyPosition.y-1080/2*zoom)
+    g.moveCamera(c1.box.getBodyPosition.x - 1920 / 2 * zoom, c1.box.getBodyPosition.y - 1080 / 2 * zoom)
     g.zoom(zoom)
     camera.update()
 
@@ -69,39 +69,39 @@ class Launch extends DesktopApplication(1920, 1080) {
 
   override def onKeyUp(keycode: Int): Unit = {
     keycode match {
-      case Input.Keys.LEFT  => c1.driftLeft = false
+      case Input.Keys.LEFT => c1.driftLeft = false
       case Input.Keys.RIGHT => c1.driftRight = false
-      case Input.Keys.UP    => c1.driveUp = 0f
+      case Input.Keys.UP => c1.driveUp = 0f
       case _ => ()
     }
   }
 
   override def onKeyDown(keycode: Int): Unit = {
     keycode match {
-      case Input.Keys.LEFT  => c1.driftLeft = true
+      case Input.Keys.LEFT => c1.driftLeft = true
       case Input.Keys.RIGHT => c1.driftRight = true
-      case Input.Keys.UP    => c1.driveUp = T2DCar.MAX_THRUST
+      case Input.Keys.UP => c1.driveUp = T2DCar.MAX_THRUST
       case _ => ()
     }
   }
 }
+
 class Menu() extends DesktopApplication(1920, 1080) {
   private var stage: Stage = _
   private var newGameButton: TextButton = _
-  private var MapChoice: SelectBox[Int] = _
-  private var PlayerChoice: SelectBox[Int] = _
+  private var mapChoice: SelectBox[String] = _
+  private var playerChoice: SelectBox[Int] = _
   private var skin: Skin = _
-  private var labelmap : Label = _
-  private var labelplayer : Label = _
+  private var labelmap: Label = _
+  private var labelplayer: Label = _
   val boxStyle = new SelectBoxStyle()
-
 
 
   override def onInit(): Unit = {
     val buttonWidth = 180f
     val buttonHeight = 30f
     val selectboxWidth = 200f
-    val  selectboxHeight = 50f
+    val selectboxHeight = 50f
 
 
     setTitle("Menu")
@@ -123,39 +123,39 @@ class Menu() extends DesktopApplication(1920, 1080) {
     labelplayer.setWidth(buttonWidth)
     labelplayer.setHeight(buttonHeight)
 
-    MapChoice = new SelectBox[Int](skin)
-    MapChoice.setWidth(selectboxWidth)
-    MapChoice.setHeight(selectboxHeight)
+    mapChoice = new SelectBox[String](skin)
+    mapChoice.setWidth(selectboxWidth)
+    mapChoice.setHeight(selectboxHeight)
 
-    PlayerChoice = new SelectBox[Int](skin)
-    PlayerChoice.setWidth(selectboxWidth+100)
-    PlayerChoice.setHeight(selectboxHeight)
+    playerChoice = new SelectBox[Int](skin)
+    playerChoice.setWidth(selectboxWidth + 100)
+    playerChoice.setHeight(selectboxHeight)
 
 
     //nombre de choix des selectbox
-    MapChoice.setMaxListCount(2)
-    PlayerChoice.setMaxListCount(4)
+    mapChoice.setMaxListCount(2)
+    playerChoice.setMaxListCount(4)
 
     //choix en question
-    MapChoice.setItems(1,2)
-    PlayerChoice.setItems(1,2,3,4)
+    mapChoice.setItems("demo","jsp")
+    playerChoice.setItems(1, 2, 3, 4)
 
 
 
     // Set la position des bouton
     newGameButton.setPosition(getWindowWidth / 2f - buttonWidth / 2f, getWindowHeight * 0.6f)
-    MapChoice.setPosition(getWindowWidth / 2f - buttonWidth / 2f, getWindowHeight * 0.4f)
-    PlayerChoice.setPosition(getWindowWidth / 2f - buttonWidth / 2f, getWindowHeight * 0.7f)
-    labelmap.setPosition(getWindowWidth / 2f - buttonWidth / 2f, getWindowHeight * 0.7f+50)
-    labelplayer.setPosition(getWindowWidth / 2f - buttonWidth / 2f, getWindowHeight * 0.4f+50)
+    mapChoice.setPosition(getWindowWidth / 2f - buttonWidth / 2f, getWindowHeight * 0.4f)
+    playerChoice.setPosition(getWindowWidth / 2f - buttonWidth / 2f, getWindowHeight * 0.7f)
+    labelmap.setPosition(getWindowWidth / 2f - buttonWidth / 2f, getWindowHeight * 0.7f + 50)
+    labelplayer.setPosition(getWindowWidth / 2f - buttonWidth / 2f, getWindowHeight * 0.4f + 50)
 
 
 
     // ajouter les boutons au stage (la fenetre)
 
     stage.addActor(newGameButton)
-    stage.addActor(MapChoice)
-    stage.addActor(PlayerChoice)
+    stage.addActor(mapChoice)
+    stage.addActor(playerChoice)
     stage.addActor(labelmap)
     stage.addActor(labelplayer)
 
@@ -165,7 +165,8 @@ class Menu() extends DesktopApplication(1920, 1080) {
         Gdx.app.exit()
         new Thread(() => {
           Thread.sleep(100)
-          new Launch().launch()
+          var game1: Game = new Game(playerChoice.getSelected, mapChoice.getSelected)
+          game1.launch()
         }).start()
 
       }
@@ -173,25 +174,23 @@ class Menu() extends DesktopApplication(1920, 1080) {
   }
 
   override def onGraphicRender(g: GdxGraphics): Unit = {
-       g.clear(Color.FIREBRICK)
+    g.clear(Color.FIREBRICK)
 
-      stage.act()
-      stage.draw()
+    stage.act()
+    stage.draw()
 
-      g.drawSchoolLogo()
-      g.drawFPS()
+    g.drawSchoolLogo()
+    g.drawFPS()
 
   }
+
   override def onDispose(): Unit = {
 
-      super.onDispose()
-      stage.dispose()
-      skin.dispose()
+    super.onDispose()
+    stage.dispose()
+    skin.dispose()
 
   }
-
-
-
 
 
 }
