@@ -18,12 +18,9 @@ class T2DCar(var position: Vector2){
   var driftRight = false
   var driveDown = 0f
   var boost = false
-  var
 
   def draw(g: GdxGraphics): Unit = {
     //DRIFT LEFT AND RIGHT //has to diminish with the speed -> max is when the car goes full speed and you have to be unable to turn when speed is 0
-
-    println(box.getBodyAngularVelocity)
     //calculate speed of the car
     var speed = getDistanceVector(box)
     if(boost){

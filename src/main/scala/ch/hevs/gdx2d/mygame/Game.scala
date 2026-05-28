@@ -15,7 +15,7 @@ import scala.collection.mutable.ArrayBuffer
 class Game(var number_player: Int, var map_name: String) extends DesktopApplication(1920, 1080) {
 
   private var world: World = _
-  val assets: GameAssets = new GameAssets
+  val assets: Map = new Map("firstMap")
   val mapsManager: MapsManager = new MapsManager
   private var c1: T2DCar = _
   private var hitboxes: ArrayBuffer[PhysicsStaticBox] = _
@@ -33,6 +33,7 @@ class Game(var number_player: Int, var map_name: String) extends DesktopApplicat
 
     val loadedMap = assets.getMap()
     mapsManager.load(loadedMap)
+    assets.findCheckPoints(assets.findCheckPointBlocksCoords())
     hitboxes = assets.generateHitBoxes() // résultat stocké
     new PhysicsScreenBoundaries(getWindowWidth.toFloat, getWindowHeight.toFloat)
 

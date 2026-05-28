@@ -9,7 +9,7 @@ import ch.hevs.gdx2d.desktop.physics.DebugRenderer
 import ch.hevs.gdx2d.lib.GdxGraphics
 import ch.hevs.gdx2d.lib.physics.PhysicsWorld
 import ch.hevs.gdx2d.lib.utils.Logger
-import ch.hevs.gdx2d.mygame.{Game, GameAssets, MapsManager, T2DCar}
+import ch.hevs.gdx2d.mygame.{Game, Map, MapsManager, T2DCar}
 import com.badlogic.gdx.Input.Keys
 import com.badlogic.gdx.{Gdx, Input}
 import com.badlogic.gdx.graphics.{Color, OrthographicCamera, Texture}
