@@ -1,28 +1,14 @@
-package ch.hevs.gdx2d.hello
+package ch.hevs.gdx2d.mygame
 
-import ch.hevs.gdx2d.components.bitmaps.BitmapImage
-import ch.hevs.gdx2d.components.physics.primitives.PhysicsStaticBox
-import ch.hevs.gdx2d.components.physics.utils.PhysicsScreenBoundaries
-import ch.hevs.gdx2d.demos.physics.car.components.Car
 import ch.hevs.gdx2d.desktop.DesktopApplication
-import ch.hevs.gdx2d.desktop.physics.DebugRenderer
 import ch.hevs.gdx2d.lib.GdxGraphics
-import ch.hevs.gdx2d.lib.physics.PhysicsWorld
-import ch.hevs.gdx2d.lib.utils.Logger
-import ch.hevs.gdx2d.mygame.{Game, Map, MapsManager, T2DCar}
-import com.badlogic.gdx.Input.Keys
-import com.badlogic.gdx.{Gdx, Input}
-import com.badlogic.gdx.graphics.{Color, OrthographicCamera, Texture}
-import com.badlogic.gdx.math.Vector2
-import com.badlogic.gdx.physics.box2d.World
+import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.scenes.scene2d.{InputEvent, Stage}
 import com.badlogic.gdx.scenes.scene2d.ui.SelectBox.SelectBoxStyle
 import com.badlogic.gdx.scenes.scene2d.ui.{Label, SelectBox, Skin, TextButton}
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.utils.Timer
-
-import scala.collection.SeqView.DropRight
-import scala.collection.mutable.ArrayBuffer
 
 
 
