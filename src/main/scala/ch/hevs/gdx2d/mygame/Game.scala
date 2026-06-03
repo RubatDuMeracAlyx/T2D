@@ -26,6 +26,7 @@ class Game(var number_player: Int, var map_name: String) extends DesktopApplicat
   var timer1:Timer = _
 
 
+
   override def onInit(): Unit = {
     setTitle(map_name)
     //loads the assets
@@ -52,6 +53,7 @@ class Game(var number_player: Int, var map_name: String) extends DesktopApplicat
     //clears the frame
     g.clear()
     PhysicsWorld.updatePhysics(Gdx.graphics.getDeltaTime)
+
 
     c1.draw(g)
 
