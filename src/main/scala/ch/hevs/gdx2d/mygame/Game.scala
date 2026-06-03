@@ -56,7 +56,7 @@ class Game(var number_player: Int, var map_name: String) extends DesktopApplicat
     c1.draw(g)
 
     val camera: OrthographicCamera = g.getCamera
-    g.moveCamera(c1.box.getBodyPosition.x - 1920 / 2 * zoom, c1.box.getBodyPosition.y - 1080 / 2 * zoom)
+    g.moveCamera(c1.getBodyPosition.x - 1920 / 2 * zoom, c1.getBodyPosition.y - 1080 / 2 * zoom)
     g.zoom(zoom)
     camera.update()
 
