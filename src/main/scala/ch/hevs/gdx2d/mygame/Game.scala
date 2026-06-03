@@ -1,7 +1,6 @@
 package ch.hevs.gdx2d.mygame
 
 import ch.hevs.gdx2d.components.physics.primitives.PhysicsStaticBox
-import ch.hevs.gdx2d.components.physics.utils.PhysicsScreenBoundaries
 import ch.hevs.gdx2d.desktop.DesktopApplication
 import ch.hevs.gdx2d.lib.GdxGraphics
 import ch.hevs.gdx2d.lib.physics.PhysicsWorld
@@ -13,35 +12,41 @@ import scala.collection.mutable.ArrayBuffer
 
 class Game(var number_player: Int, var map_name: String) extends DesktopApplication(1920, 1080) {
 
+  //putting all the variables that will change later here
   private var world: World = _
   val assets: Map = new Map("firstMap")
   val mapsManager: MapsManager = new MapsManager
+  //to move later (one for each player)
   private var c1: T2DCar = _
+  //for the walls
   private var hitboxes: ArrayBuffer[PhysicsStaticBox] = _
+  //camera zoom (to change later)
   var zoom = 2f
 
 
   override def onInit(): Unit = {
     setTitle(map_name)
-    //loads the map
+    //loads the assets
     assets.loadAll()
     assets.manager.finishLoading()
 
-    //applying forces to th world and removing gravity (top view game)
+    //applying forces to the world and removing gravity (top view game)
     world = PhysicsWorld.getInstance()
     world.setGravity(new Vector2(0f, 0f))
 
-    //load
-    val loadedMap = assets.getMap()
-    mapsManager.load(loadedMap)
+    //load the whole map
+    mapsManager.load(assets.getMap())
+    //find the checkpoints and group them (depending on the map) and add a hitbox on them
     assets.findCheckPoints(assets.findCheckPointBlocksCoords())
-    hitboxes = assets.generateHitBoxes() // résultat stocké
-    new PhysicsScreenBoundaries(getWindowWidth.toFloat, getWindowHeight.toFloat)
-
+    //generate the walls
+    hitboxes = assets.generateHitBoxes()
+    //creates the car (to change depending on player
     c1 = new T2DCar(new Vector2(assets.spawnPlacementForTheCar()(0)))
   }
 
+  //every frame
   override def onGraphicRender(g: GdxGraphics): Unit = {
+    //clears the frame
     g.clear()
     PhysicsWorld.updatePhysics(Gdx.graphics.getDeltaTime)
 
