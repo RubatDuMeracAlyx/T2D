@@ -18,8 +18,10 @@ class T2DCar(var position: Vector2){
   var driftRight = false
   var driveDown = 0f
   var boost = false
+  var derapage = false
 
   def draw(g: GdxGraphics): Unit = {
+    //DRIFT LEFT AND RIGHT //has to diminish with the speed -> max is when the car goes full speed and you have to be unable to turn when speed is 0
 
     //calculate speed of the car (basically is the norm of the vector
     var speed = getDistanceVector(box)
@@ -68,7 +70,7 @@ class T2DCar(var position: Vector2){
 
 
 object T2DCar {
-  var MAX_THRUST = 40f
+  var MAX_THRUST = 20f
   var MAX_TORQUE = 0.5f
   val DRAG_THRUST = 0.5f
   val DRAG_TORQUE = 1.3f
