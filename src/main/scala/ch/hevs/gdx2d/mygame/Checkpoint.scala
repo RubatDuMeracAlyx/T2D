@@ -2,7 +2,6 @@ package ch.hevs.gdx2d.mygame
 
 import ch.hevs.gdx2d.components.physics.primitives.PhysicsStaticBox
 import ch.hevs.gdx2d.lib.physics.AbstractPhysicsObject
-import ch.hevs.gdx2d.lib.utils.Logger
 import com.badlogic.gdx.math.Vector2
 
 import scala.collection.mutable.ArrayBuffer

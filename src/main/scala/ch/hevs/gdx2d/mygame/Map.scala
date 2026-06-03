@@ -1,9 +1,8 @@
 package ch.hevs.gdx2d.mygame
 
-import ch.hevs.gdx2d.components.physics.primitives.{PhysicsBox, PhysicsStaticBox}
+import ch.hevs.gdx2d.components.physics.primitives.PhysicsStaticBox
 import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver
-import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.maps.tiled.{TiledMap, TiledMapTileLayer, TmxMapLoader}
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.utils.Disposable

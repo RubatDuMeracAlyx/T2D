@@ -9,7 +9,6 @@ import com.badlogic.gdx.{Gdx, Input}
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.World
-
 import scala.collection.mutable.ArrayBuffer
 
 class Game(var number_player: Int, var map_name: String) extends DesktopApplication(1920, 1080) {
