@@ -23,6 +23,8 @@ class Game(var number_player: Int, var map_name: String) extends DesktopApplicat
   //camera zoom (to change later)
   var zoom = 2f
 
+  var timer1:Timer = _
+
 
   override def onInit(): Unit = {
     setTitle(map_name)
@@ -42,6 +44,7 @@ class Game(var number_player: Int, var map_name: String) extends DesktopApplicat
     hitboxes = assets.generateHitBoxes()
     //creates the car (to change depending on player
     c1 = new T2DCar(new Vector2(assets.spawnPlacementForTheCar()(0)))
+    timer1 = new Timer
   }
 
   //every frame
@@ -58,7 +61,7 @@ class Game(var number_player: Int, var map_name: String) extends DesktopApplicat
     camera.update()
 
     mapsManager.render(camera)
-
+    println(timer1.getTime())
   }
 
   override def onKeyUp(keycode: Int): Unit = {
@@ -68,7 +71,7 @@ class Game(var number_player: Int, var map_name: String) extends DesktopApplicat
       case Input.Keys.UP => c1.driveUp = 0f
       case Input.Keys.DOWN => c1.driveDown = 0f
       case Input.Keys.SPACE => c1.boost = false
-      case Input.Keys.R => c1.derapage = false
+      //case Input.Keys.R => c1.derapage = false
       case _ => ()
     }
   }
@@ -80,7 +83,7 @@ class Game(var number_player: Int, var map_name: String) extends DesktopApplicat
       case Input.Keys.UP => c1.driveUp = T2DCar.MAX_THRUST
       case Input.Keys.DOWN => c1.driveDown = T2DCar.MAX_THRUST
       case Input.Keys.SPACE => c1.boost = true
-      case Input.Keys.R => c1.derapage = true
+      //case Input.Keys.R => c1.derapage = true
       case _ => ()
     }
   }
