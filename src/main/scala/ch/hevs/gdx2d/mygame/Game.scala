@@ -45,6 +45,8 @@ class Game(var number_player: Int, var map_name: String) extends DesktopApplicat
     assets.generateHitBoxes()
     //generate the sand
     assets.generateSand()
+    //install the SINGLE contact listener for the whole physics world
+    world.setContactListener(new GameContactListener)
     //creates the car (to change depending on player
     c1 = new Player(new Vector2(assets.spawnPlacementForTheCar()(0)))
     timer1 = new Timer

@@ -1,12 +1,9 @@
 package ch.hevs.gdx2d.mygame
 
-import ch.hevs.gdx2d.components.physics.primitives.PhysicsStaticBox
-import ch.hevs.gdx2d.lib.physics.PhysicsWorld
 import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver
 import com.badlogic.gdx.maps.tiled.{TiledMap, TiledMapTileLayer, TmxMapLoader}
 import com.badlogic.gdx.math.Vector2
-import com.badlogic.gdx.physics.box2d.Contact
 import com.badlogic.gdx.utils.Disposable
 
 import scala.collection.mutable.ArrayBuffer
@@ -150,21 +147,8 @@ class Map(val mapName:String) extends Disposable {
   }
 
   def generateHitBoxes(): Unit = {
-
-    class Wall(position: Vector2, width: Float, height: Float) extends PhysicsStaticBox("Wall", position, width, height){
-
-      override def enableCollisionListener(): Unit = {
-        val world = PhysicsWorld.getInstance
-        world.setContactListener(this)
-      }
-      override def endContact(contact: Contact): Unit = {
-        println("wall end contact")
-      }
-    }
-
     val map : TiledMap = new TmxMapLoader().load(MAP_PATH)
     val wallLayer = map.getLayers.get("wall").asInstanceOf[TiledMapTileLayer]
-    // val allHitBox: ArrayBuffer[PhysicsStaticBox] = ArrayBuffer.empty
 
     val mapWidth = wallLayer.getWidth
     val mapHeight = wallLayer.getHeight
@@ -177,12 +161,12 @@ class Map(val mapName:String) extends Disposable {
         y * Map.tileHeight + Map.tileHeight / 2f
       )
 
+      // A wall is just a solid static box: Box2D blocks the car against it on
+      // its own, so no per-wall contact listener is needed.
       if (cell != null) {
-        val box = new Wall(position, Map.tileWidth, Map.tileHeight)
-        box.enableCollisionListener()
+        new Wall(position, Map.tileWidth, Map.tileHeight)
       }
     }
-
   }
 
   def generateSand(): Unit = {
@@ -207,11 +191,10 @@ class Map(val mapName:String) extends Disposable {
 
       if (cell != null) {
         count += 1
+        // Sensor: the car drives over the sand (no bounce) but the contact is
+        // still reported to GameContactListener, which flips Player.onSand.
         val sand = new Sand(position, Map.tileWidth, Map.tileHeight)
-        sand.enableCollisionListener()
-        sand.setSensor(false)
-        println("sand created")
-        //allSandHitBox.append(sand)
+        sand.setSensor(true)
       }
 
 

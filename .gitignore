@@ -1,0 +1,7 @@
+/** Default ignored patterns for Scala projects **/
+.metals
+.scala-build
+.vscode
+.claude
+.bsp
+CLAUDE.md
