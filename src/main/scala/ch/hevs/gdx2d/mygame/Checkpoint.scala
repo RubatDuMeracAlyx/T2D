@@ -27,9 +27,9 @@ class Checkpoint(val arrB: ArrayBuffer[Vector2], val name:String) {
 class Box(name: String, position: Vector2, width: Float, height: Float, c : Checkpoint) extends PhysicsStaticBox(name, position, width, height){
 
   override def collision(theOtherObject: AbstractPhysicsObject, energy: Float): Unit = {
-    print(c.checked + " ")
+    //print(c.checked + " ")
     c.checked = true
-    println(c.name + c.checked)
+    //println(c.name + c.checked)
 
   }
 

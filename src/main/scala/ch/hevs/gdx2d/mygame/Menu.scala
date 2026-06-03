@@ -19,6 +19,7 @@ import com.badlogic.gdx.scenes.scene2d.{InputEvent, Stage}
 import com.badlogic.gdx.scenes.scene2d.ui.SelectBox.SelectBoxStyle
 import com.badlogic.gdx.scenes.scene2d.ui.{Label, SelectBox, Skin, TextButton}
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
+import com.badlogic.gdx.utils.Timer
 
 import scala.collection.SeqView.DropRight
 import scala.collection.mutable.ArrayBuffer
@@ -33,6 +34,7 @@ class Menu() extends DesktopApplication(1920, 1080) {
   private var skin: Skin = _
   private var labelmap: Label = _
   private var labelplayer: Label = _
+  private var timer: Timer = _
   val boxStyle = new SelectBoxStyle()
 
 
@@ -49,6 +51,8 @@ class Menu() extends DesktopApplication(1920, 1080) {
     Gdx.input.setInputProcessor(stage)
 
     skin = new Skin(Gdx.files.internal("ui/uiskin.json"))
+
+    timer = new Timer
 
     newGameButton = new TextButton("New game", skin)
     newGameButton.setWidth(buttonWidth)
@@ -114,7 +118,6 @@ class Menu() extends DesktopApplication(1920, 1080) {
 
   override def onGraphicRender(g: GdxGraphics): Unit = {
     g.clear(Color.FIREBRICK)
-
     stage.act()
     stage.draw()
 
@@ -136,7 +139,7 @@ class Menu() extends DesktopApplication(1920, 1080) {
 
 object Menu {
   def main(args: Array[String]): Unit = {
-    new Game(2,"67").launch()
+    new Menu().launch()
 
   }
 }
