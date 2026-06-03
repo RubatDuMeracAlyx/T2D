@@ -3,10 +3,10 @@ package ch.hevs.gdx2d.mygame
 import ch.hevs.gdx2d.components.bitmaps.BitmapImage
 import ch.hevs.gdx2d.components.physics.primitives.PhysicsBox
 import ch.hevs.gdx2d.lib.GdxGraphics
-import ch.hevs.gdx2d.mygame.T2DCar.{BoostValue, DRAG_THRUST, DRAG_TORQUE, MAX_TORQUE}
+import ch.hevs.gdx2d.mygame.Car.{BoostValue, DRAG_THRUST, DRAG_TORQUE, MAX_TORQUE}
 import com.badlogic.gdx.math.Vector2
 
-class T2DCar(var position: Vector2) extends PhysicsBox("car", position, 150f, 45f, math.toRadians(90.0).toFloat){
+class Player(var position: Vector2) extends PhysicsBox("car", position, 150f, 45f, math.toRadians(90.0).toFloat){
   var accelerate: Boolean = false
 
   private val carImage = new BitmapImage("data/res/CARS/BLUECAR/blueCar.png")
@@ -62,7 +62,7 @@ class T2DCar(var position: Vector2) extends PhysicsBox("car", position, 150f, 45
 
 
 
-object T2DCar {
+object Car {
   var MAX_THRUST = 20f
   var MAX_TORQUE = 0.5f
   val DRAG_THRUST = 0.5f

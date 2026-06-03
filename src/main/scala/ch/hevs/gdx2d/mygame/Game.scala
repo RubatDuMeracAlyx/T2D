@@ -17,7 +17,7 @@ class Game(var number_player: Int, var map_name: String) extends DesktopApplicat
   val assets: Map = new Map("secondMap")
   val mapsManager: MapsManager = new MapsManager
   //to move later (one for each player)
-  private var c1: T2DCar = _
+  private var c1:Player = _
   //for the walls
   private var hitboxes: ArrayBuffer[PhysicsStaticBox] = _
   //camera zoom (to change later)
@@ -43,7 +43,7 @@ class Game(var number_player: Int, var map_name: String) extends DesktopApplicat
     //generate the walls
     hitboxes = assets.generateHitBoxes()
     //creates the car (to change depending on player
-    c1 = new T2DCar(new Vector2(assets.spawnPlacementForTheCar()(0)))
+    c1 = new Player(new Vector2(assets.spawnPlacementForTheCar()(0)))
     timer1 = new Timer
   }
 
@@ -80,8 +80,8 @@ class Game(var number_player: Int, var map_name: String) extends DesktopApplicat
     keycode match {
       case Input.Keys.LEFT => c1.driftLeft = true
       case Input.Keys.RIGHT => c1.driftRight = true
-      case Input.Keys.UP => c1.driveUp = T2DCar.MAX_THRUST
-      case Input.Keys.DOWN => c1.driveDown = T2DCar.MAX_THRUST
+      case Input.Keys.UP => c1.driveUp = Car.MAX_THRUST
+      case Input.Keys.DOWN => c1.driveDown = Car.MAX_THRUST
       case Input.Keys.SPACE => c1.boost = true
       //case Input.Keys.R => c1.derapage = true
       case _ => ()
