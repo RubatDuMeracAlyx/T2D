@@ -34,9 +34,9 @@ class T2DCar(var position: Vector2){
 
     //turns the car
     if (driftLeft)box.applyBodyTorque(MAX_TORQUE*speed, true)
-    if (driftRight)box.applyBodyTorque(-T2DCar.MAX_TORQUE*speed, true)
+    if (driftRight)box.applyBodyTorque(-MAX_TORQUE*speed, true)
     //stop the inertia of the turn
-    if(box.getBodyAngularVelocity > 0)box.applyBodyTorque(DRAG_TORQUE, true)
+    if(box.getBodyAngularVelocity > 0)box.applyBodyTorque(-DRAG_TORQUE, true)
     if(box.getBodyAngularVelocity < 0)box.applyBodyTorque(DRAG_TORQUE, true)
 
     //goes backward
