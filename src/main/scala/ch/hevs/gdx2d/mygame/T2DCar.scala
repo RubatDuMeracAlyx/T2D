@@ -20,9 +20,11 @@ class T2DCar(var position: Vector2){
   var boost = false
 
   def draw(g: GdxGraphics): Unit = {
-    //DRIFT LEFT AND RIGHT //has to diminish with the speed -> max is when the car goes full speed and you have to be unable to turn when speed is 0
-    //calculate speed of the car
+
+    //calculate speed of the car (basically is the norm of the vector
     var speed = getDistanceVector(box)
+
+    //booster
     if(boost){
       box.applyBodyForceToCenter(
         math.cos(box.getBodyAngle.toDouble).toFloat * BoostValue,
@@ -30,31 +32,24 @@ class T2DCar(var position: Vector2){
         true)
     }
 
+    //turns the car
     if (driftLeft)box.applyBodyTorque(T2DCar.MAX_TORQUE*speed, true)
     if (driftRight)box.applyBodyTorque(-T2DCar.MAX_TORQUE*speed, true)
-
+    //stop the inertia of the turn
     if(box.getBodyAngularVelocity > 0)box.applyBodyTorque(-T2DCar.DRAG_TORQUE, true)
     if(box.getBodyAngularVelocity < 0)box.applyBodyTorque(T2DCar.DRAG_TORQUE, true)
 
-
-
+    //goes backward
     box.applyBodyForceToCenter(
       -math.cos(box.getBodyAngle.toDouble).toFloat * driveDown,
       -math.sin(box.getBodyAngle.toDouble).toFloat * driveDown,
-      true
-    )
-
-
-
-    //goes forward with the angle the car is at
-
-    //calculate ratio beetween the two thing
-
+      true)
+    //goes forward
     box.applyBodyForceToCenter(
       math.cos(box.getBodyAngle.toDouble).toFloat * driveUp,
       math.sin(box.getBodyAngle.toDouble).toFloat * driveUp,
       true)
-
+    //stops the inertia of the car
     box.applyBodyForceToCenter(
       box.getBodyLinearVelocity.x * -T2DCar.DRAG_THRUST * speed,
       box.getBodyLinearVelocity.y * -T2DCar.DRAG_THRUST * speed,
@@ -73,7 +68,7 @@ class T2DCar(var position: Vector2){
 
 
 object T2DCar {
-  var MAX_THRUST = 20f
+  var MAX_THRUST = 40f
   var MAX_TORQUE = 0.5f
   val DRAG_THRUST = 0.5f
   val DRAG_TORQUE = 1.3f
