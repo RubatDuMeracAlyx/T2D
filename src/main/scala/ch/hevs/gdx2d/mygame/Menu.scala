@@ -58,11 +58,11 @@ class Menu() extends DesktopApplication(1920, 1080) {
     newGameButton.setWidth(buttonWidth)
     newGameButton.setHeight(buttonHeight)
 
-    labelmap = new Label("Choose the map", skin)
+    labelmap = new Label("How many player", skin)
     labelmap.setWidth(buttonWidth)
     labelmap.setHeight(buttonHeight)
 
-    labelplayer = new Label("How many player", skin)
+    labelplayer = new Label("Choose the map", skin)
     labelplayer.setWidth(buttonWidth)
     labelplayer.setHeight(buttonHeight)
 
@@ -74,14 +74,17 @@ class Menu() extends DesktopApplication(1920, 1080) {
     playerChoice.setWidth(selectboxWidth + 100)
     playerChoice.setHeight(selectboxHeight)
 
-
     //nombre de choix des selectbox
     mapChoice.setMaxListCount(2)
     playerChoice.setMaxListCount(4)
 
+
     //choix en question
     mapChoice.setItems("demo","jsp")
-    playerChoice.setItems(1, 2, 3, 4)
+    playerChoice.setItems(1,2,3,4)
+
+    mapChoice.setSelected("demo")
+    playerChoice.setSelected(1)
 
 
 
@@ -107,13 +110,14 @@ class Menu() extends DesktopApplication(1920, 1080) {
       override def clicked(event: InputEvent, x: Float, y: Float): Unit = {
         Gdx.app.exit()
         new Thread(() => {
-          Thread.sleep(100)
+          Thread.sleep(200)
           var game1: Game = new Game(playerChoice.getSelected, mapChoice.getSelected)
           game1.launch()
         }).start()
 
       }
     })
+
   }
 
   override def onGraphicRender(g: GdxGraphics): Unit = {
