@@ -12,7 +12,7 @@ class T2DCar(var position: Vector2){
   var accelerate: Boolean = false
 
   val box = new PhysicsBox("car", position, 150f, 45f, math.toRadians(90.0).toFloat)
-  private val carImage = new BitmapImage("data/res/CARS/REDCAR/redCar.png")
+  private val carImage = new BitmapImage("data/res/CARS/BLUECAR/blueCar.png")
   var driveUp = 0f
   var driftLeft = false
   var driftRight = false
