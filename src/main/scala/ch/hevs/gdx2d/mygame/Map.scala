@@ -1,10 +1,12 @@
 package ch.hevs.gdx2d.mygame
 
 import ch.hevs.gdx2d.components.physics.primitives.PhysicsStaticBox
+import ch.hevs.gdx2d.lib.physics.PhysicsWorld
 import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver
 import com.badlogic.gdx.maps.tiled.{TiledMap, TiledMapTileLayer, TmxMapLoader}
 import com.badlogic.gdx.math.Vector2
+import com.badlogic.gdx.physics.box2d.Contact
 import com.badlogic.gdx.utils.Disposable
 
 import scala.collection.mutable.ArrayBuffer
@@ -84,7 +86,6 @@ class Map(val mapName:String) extends Disposable {
   }
 
   def findCheckPoints(checkPointBlocks : ArrayBuffer[Vector2]): ArrayBuffer[ArrayBuffer[Vector2]] = {
-
     val checkpoints : ArrayBuffer[ArrayBuffer[Vector2]] = ArrayBuffer.empty
 
     while (checkPointBlocks.length != 0) {
@@ -110,7 +111,8 @@ class Map(val mapName:String) extends Disposable {
       }
       checkpoints.addOne(checkpoint)
     }
-    createCheckPoints(checkpoints)
+
+    //createCheckPoints(checkpoints)
     checkpoints
   }
 
@@ -147,10 +149,22 @@ class Map(val mapName:String) extends Disposable {
     allSpawn
   }
 
-  def generateHitBoxes(): ArrayBuffer[PhysicsStaticBox] = {
+  def generateHitBoxes(): Unit = {
+
+    class Wall(position: Vector2, width: Float, height: Float) extends PhysicsStaticBox("Wall", position, width, height){
+
+      override def enableCollisionListener(): Unit = {
+        val world = PhysicsWorld.getInstance
+        world.setContactListener(this)
+      }
+      override def endContact(contact: Contact): Unit = {
+        println("wall end contact")
+      }
+    }
+
     val map : TiledMap = new TmxMapLoader().load(MAP_PATH)
     val wallLayer = map.getLayers.get("wall").asInstanceOf[TiledMapTileLayer]
-    val allHitBox: ArrayBuffer[PhysicsStaticBox] = ArrayBuffer.empty
+    // val allHitBox: ArrayBuffer[PhysicsStaticBox] = ArrayBuffer.empty
 
     val mapWidth = wallLayer.getWidth
     val mapHeight = wallLayer.getHeight
@@ -164,16 +178,50 @@ class Map(val mapName:String) extends Disposable {
       )
 
       if (cell != null) {
-
-        val box = new PhysicsStaticBox("", position, Map.tileWidth, Map.tileHeight, math.toRadians(90.0).toFloat)
-
-        allHitBox.append(box)
+        val box = new Wall(position, Map.tileWidth, Map.tileHeight)
+        box.enableCollisionListener()
       }
     }
-    println(allHitBox.mkString)
-    allHitBox
+
+  }
+
+  def generateSand(): Unit = {
+    val map: TiledMap = new TmxMapLoader().load(MAP_PATH)
+    val sandLayer = map.getLayers.get("sand").asInstanceOf[TiledMapTileLayer]
+
+    if (!sandLayer.isVisible)
+      return
+
+    val mapWidth = sandLayer.getWidth
+    val mapHeight = sandLayer.getHeight
+
+    var count : Int = 0
+
+    for (x <- 0 until mapWidth; y <- 0 until mapHeight) {
+      val cell = sandLayer.getCell(x, y)
+
+      val position = new Vector2(
+        x * Map.tileWidth + Map.tileWidth / 2f,
+        y * Map.tileHeight + Map.tileHeight / 2f
+      )
+
+      if (cell != null) {
+        count += 1
+        val sand = new Sand(position, Map.tileWidth, Map.tileHeight)
+        sand.enableCollisionListener()
+        sand.setSensor(false)
+        println("sand created")
+        //allSandHitBox.append(sand)
+      }
+
+
+    }
+    println(s"number of sand cells ${count}")
+    //allSandHitBox
   }
 }
+
+
 
 
 object Map {

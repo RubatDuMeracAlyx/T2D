@@ -29,7 +29,7 @@ class Menu() extends DesktopApplication(1920, 1080) {
     val selectboxWidth = 200f
     val selectboxHeight = 50f
 
-
+    
     setTitle("Menu")
 
     stage = new Stage()
@@ -83,7 +83,7 @@ class Menu() extends DesktopApplication(1920, 1080) {
 
 
     // ajouter les boutons au stage (la fenetre)
-
+    
     stage.addActor(newGameButton)
     stage.addActor(mapChoice)
     stage.addActor(playerChoice)

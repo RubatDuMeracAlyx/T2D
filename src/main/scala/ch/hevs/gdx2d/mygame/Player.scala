@@ -3,6 +3,7 @@ package ch.hevs.gdx2d.mygame
 import ch.hevs.gdx2d.components.bitmaps.BitmapImage
 import ch.hevs.gdx2d.components.physics.primitives.PhysicsBox
 import ch.hevs.gdx2d.lib.GdxGraphics
+import ch.hevs.gdx2d.lib.physics.AbstractPhysicsObject
 import ch.hevs.gdx2d.mygame.Car.{BoostValue, DRAG_THRUST, DRAG_TORQUE, MAX_TORQUE}
 import com.badlogic.gdx.math.Vector2
 
@@ -15,10 +16,11 @@ class Player(var position: Vector2) extends PhysicsBox("car", position, 150f, 45
   var driftRight = false
   var driveDown = 0f
   var boost = false
-
+  var speed = 0f
+  var onSand = false
+  
   def draw(g: GdxGraphics): Unit = {
-    var speed = getDistanceVector(this)
-
+    speed = getDistanceVector(this)
     //booster
     if(boost){
       this.applyBodyForceToCenter(

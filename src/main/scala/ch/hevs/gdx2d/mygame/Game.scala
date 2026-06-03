@@ -14,7 +14,7 @@ class Game(var number_player: Int, var map_name: String) extends DesktopApplicat
 
   //putting all the variables that will change later here
   private var world: World = _
-  val assets: Map = new Map("secondMap")
+  val assets: Map = new Map("firstMap")
   val mapsManager: MapsManager = new MapsManager
   //to move later (one for each player)
   private var c1:Player = _
@@ -27,6 +27,7 @@ class Game(var number_player: Int, var map_name: String) extends DesktopApplicat
 
 
   override def onInit(): Unit = {
+    
     setTitle(map_name)
     //loads the assets
     assets.loadAll()
@@ -41,7 +42,9 @@ class Game(var number_player: Int, var map_name: String) extends DesktopApplicat
     //find the checkpoints and group them (depending on the map) and add a hitbox on them
     assets.findCheckPoints(assets.findCheckPointBlocksCoords())
     //generate the walls
-    hitboxes = assets.generateHitBoxes()
+    assets.generateHitBoxes()
+    //generate the sand
+    assets.generateSand()
     //creates the car (to change depending on player
     c1 = new Player(new Vector2(assets.spawnPlacementForTheCar()(0)))
     timer1 = new Timer
@@ -52,16 +55,21 @@ class Game(var number_player: Int, var map_name: String) extends DesktopApplicat
     //clears the frame
     g.clear()
     PhysicsWorld.updatePhysics(Gdx.graphics.getDeltaTime)
-
+    
+    
     c1.draw(g)
 
     val camera: OrthographicCamera = g.getCamera
     g.moveCamera(c1.getBodyPosition.x - 1920 / 2 * zoom, c1.getBodyPosition.y - 1080 / 2 * zoom)
     g.zoom(zoom)
-    camera.update()
 
     mapsManager.render(camera)
-    println(timer1.getTime())
+    
+    g.drawString(5.0F, 15.0F, s"Button status ")
+    g.drawSchoolLogo()
+    g.drawFPS()
+    //println(timer1.getTime())
+    
   }
 
   override def onKeyUp(keycode: Int): Unit = {
