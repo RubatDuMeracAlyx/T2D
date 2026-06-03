@@ -2,7 +2,6 @@ package ch.hevs.gdx2d.mygame
 
 import ch.hevs.gdx2d.components.physics.primitives.PhysicsStaticBox
 import ch.hevs.gdx2d.lib.physics.AbstractPhysicsObject
-import ch.hevs.gdx2d.lib.utils.Logger
 import com.badlogic.gdx.math.Vector2
 
 import scala.collection.mutable.ArrayBuffer
@@ -27,9 +26,9 @@ class Checkpoint(val arrB: ArrayBuffer[Vector2], val name:String) {
 class Box(name: String, position: Vector2, width: Float, height: Float, c : Checkpoint) extends PhysicsStaticBox(name, position, width, height){
 
   override def collision(theOtherObject: AbstractPhysicsObject, energy: Float): Unit = {
-    print(c.checked + " ")
+    //print(c.checked + " ")
     c.checked = true
-    println(c.name + c.checked)
+    //println(c.name + c.checked)
 
   }
 
