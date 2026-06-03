@@ -21,7 +21,6 @@ class Menu() extends DesktopApplication(1920, 1080) {
   private var labelmap: Label = _
   private var labelplayer: Label = _
   private var timer: Timer = _
-  val boxStyle = new SelectBoxStyle()
 
 
   override def onInit(): Unit = {
@@ -110,10 +109,8 @@ class Menu() extends DesktopApplication(1920, 1080) {
     g.clear(Color.FIREBRICK)
     stage.act()
     stage.draw()
-
     g.drawSchoolLogo()
     g.drawFPS()
-
   }
 
   override def onDispose(): Unit = {
@@ -121,7 +118,6 @@ class Menu() extends DesktopApplication(1920, 1080) {
     super.onDispose()
     stage.dispose()
     skin.dispose()
-
   }
 
 

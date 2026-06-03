@@ -22,14 +22,16 @@ class Game(var number_player: Int, var map_name: String) extends DesktopApplicat
 
 
   override def onInit(): Unit = {
-    setTitle("RACE")
-
+    setTitle(map_name)
+    //loads the map
     assets.loadAll()
     assets.manager.finishLoading()
 
+    //applying forces to th world and removing gravity (top view game)
     world = PhysicsWorld.getInstance()
     world.setGravity(new Vector2(0f, 0f))
 
+    //load
     val loadedMap = assets.getMap()
     mapsManager.load(loadedMap)
     assets.findCheckPoints(assets.findCheckPointBlocksCoords())

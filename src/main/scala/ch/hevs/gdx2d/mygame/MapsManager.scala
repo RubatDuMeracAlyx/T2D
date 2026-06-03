@@ -1,6 +1,5 @@
 package ch.hevs.gdx2d.mygame
 
-
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer
 import com.badlogic.gdx.maps.tiled.TiledMap
