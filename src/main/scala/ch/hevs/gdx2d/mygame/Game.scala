@@ -15,7 +15,7 @@ import scala.collection.mutable.ArrayBuffer
 class Game(var number_player: Int, var map_name: String) extends DesktopApplication(1920, 1080) {
 
   private var world: World = _
-  val assets: Map = new Map("firstMap")
+  val assets: Map = new Map("secondMap")
   val mapsManager: MapsManager = new MapsManager
   private var c1: T2DCar = _
   private var hitboxes: ArrayBuffer[PhysicsStaticBox] = _
