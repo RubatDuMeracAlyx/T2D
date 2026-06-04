@@ -22,12 +22,10 @@ class Game(var number_player: Int, var map_name: String) extends DesktopApplicat
   private var hitboxes: ArrayBuffer[PhysicsStaticBox] = _
   //camera zoom (to change later)
   var zoom = 2f
-
-  var timer1:Timer = _
+  var timer1 = new Timer()
 
 
   override def onInit(): Unit = {
-    
     setTitle(map_name)
     //loads the assets
     assets.loadAll()
@@ -49,7 +47,7 @@ class Game(var number_player: Int, var map_name: String) extends DesktopApplicat
     world.setContactListener(new GameContactListener)
     //creates the car (to change depending on player
     c1 = new Player(new Vector2(assets.spawnPlacementForTheCar()(0)))
-    timer1 = new Timer
+
   }
 
   //every frame
@@ -57,21 +55,16 @@ class Game(var number_player: Int, var map_name: String) extends DesktopApplicat
     //clears the frame
     g.clear()
     PhysicsWorld.updatePhysics(Gdx.graphics.getDeltaTime)
-    
-    
+
     c1.draw(g)
 
     val camera: OrthographicCamera = g.getCamera
     g.moveCamera(c1.getBodyPosition.x - 1920 / 2 * zoom, c1.getBodyPosition.y - 1080 / 2 * zoom)
     g.zoom(zoom)
+    camera.update()
 
     mapsManager.render(camera)
-    
-    g.drawString(5.0F, 15.0F, s"Button status ")
-    g.drawSchoolLogo()
-    g.drawFPS()
-    //println(timer1.getTime())
-    
+    println(timer1.getTime())
   }
 
   override def onKeyUp(keycode: Int): Unit = {
@@ -93,6 +86,12 @@ class Game(var number_player: Int, var map_name: String) extends DesktopApplicat
       case Input.Keys.UP => c1.driveUp = Car.MAX_THRUST
       case Input.Keys.DOWN => c1.driveDown = Car.MAX_THRUST
       case Input.Keys.SPACE => c1.boost = true
+      case Input.Keys.ESCAPE => Gdx.app.exit()
+        new Thread(() => {
+          Thread.sleep(200)
+          var menu : Menu= new Menu()
+          menu.launch()
+        }).start()
       //case Input.Keys.R => c1.derapage = true
       case _ => ()
     }

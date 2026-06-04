@@ -1,6 +1,12 @@
 package ch.hevs.gdx2d.mygame
 
-class Timer {
+import ch.hevs.gdx2d.lib.GdxGraphics
+import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.graphics.g2d.SpriteBatch
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer
+import com.badlogic.gdx.graphics.{Color, OrthographicCamera}
+
+class Timer(){
   var startTime = System.currentTimeMillis()
 
   def getTime():Double = {
