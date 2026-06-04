@@ -7,7 +7,9 @@ import ch.hevs.gdx2d.lib.physics.AbstractPhysicsObject
 import ch.hevs.gdx2d.mygame.Car.{BoostValue, DRAG_THRUST, DRAG_TORQUE, MAX_TORQUE}
 import com.badlogic.gdx.math.Vector2
 
-class Player(var position: Vector2) extends PhysicsBox("car", position, 150f, 45f, math.toRadians(90.0).toFloat){
+import scala.collection.mutable.ArrayBuffer
+
+class Player(var position: Vector2, nCheckpoints: Int) extends PhysicsBox("car", position, 150f, 45f, math.toRadians(90.0).toFloat){
   var accelerate: Boolean = false
 
   private val carImage = new BitmapImage("data/res/CARS/BLUECAR/blueCar.png")
@@ -18,6 +20,41 @@ class Player(var position: Vector2) extends PhysicsBox("car", position, 150f, 45
   var boost = false
   var speed = 0f
   var onSand = false
+  var stateOfTheCheckpoint : ArrayBuffer[Boolean] = ArrayBuffer.empty
+  var nDrivenLapsInClass : Int = 0
+  var finished : Boolean = false
+
+  createTheStateOfTheCheckpoint(nCheckpoints)
+
+  def didIWentThoughAllTheCheckpoints (checkpointState: ArrayBuffer[Boolean]) : Boolean = {
+    var result : Boolean = true
+
+    for (c <- checkpointState){
+      if (c == false){return false}
+    }
+
+    result
+  }
+
+  def logicForTheFinishBloc(checkpointState: ArrayBuffer[Boolean], nDrivenLapsInFunc: Int): Unit = {
+    if (didIWentThoughAllTheCheckpoints(checkpointState) == true && nDrivenLapsInClass == 2){
+      finished = true
+      println("FINISHED!")
+    }
+    else if (didIWentThoughAllTheCheckpoints(checkpointState) == true){
+      nDrivenLapsInClass += 1
+      for (i <- checkpointState.indices){
+        checkpointState(i) = false
+      }
+      println(checkpointState)
+    }
+  }
+
+  def createTheStateOfTheCheckpoint (nCheckpoints : Int) : Unit= {
+    for (i <- 0 until nCheckpoints){
+      stateOfTheCheckpoint.addOne(false)
+    }
+  }
   
   def draw(g: GdxGraphics): Unit = {
     speed = getDistanceVector(this)

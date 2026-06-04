@@ -109,18 +109,18 @@ class Map(val mapName:String) extends Disposable {
       checkpoints.addOne(checkpoint)
     }
 
-    //createCheckPoints(checkpoints)
+    createCheckPoints(checkpoints)
     checkpoints
   }
 
-  def createCheckPoints(arr: ArrayBuffer[ArrayBuffer[Vector2]]): Unit = {
-    for(i <- 0 until arr.length){
-      val name : String = "checkpoint" + (i + 1)
-      var cp:Checkpoint = new Checkpoint(arr(i),name)
+  def createCheckPoints(checkpoints: ArrayBuffer[ArrayBuffer[Vector2]]): Unit = {
+    for(i <- 0 until checkpoints.length){
+      val number : Int = i
+      var cp : Checkpoint = new Checkpoint(checkpoints(i),number)
     }
   }
 
-  def spawnPlacementForTheCar(): ArrayBuffer[Vector2] = {
+  def createSpawnPlacementAndFinishForTheCar(): ArrayBuffer[Vector2] = {
 
     val map: TiledMap = new TmxMapLoader().load(MAP_PATH)
     val finishLayer = map.getLayers.get("finish").asInstanceOf[TiledMapTileLayer]
@@ -133,14 +133,18 @@ class Map(val mapName:String) extends Disposable {
 
     for (x <- 0 until mapWidth; y <- 0 until mapHeight) {
       val cell = finishLayer.getCell(x, y)
+
+      val position = new Vector2(
+        x * tileWidth + tileWidth / 2f,
+        y * tileHeight + tileHeight / 2f
+      )
+
       if (cell != null) {
 
-        val position = new Vector2(
-          x * tileWidth + tileWidth / 2f,
-          y * tileHeight + tileHeight / 2f
-        )
-
+        val finish = new Finish(position, Map.tileWidth, Map.tileHeight)
+        finish.setSensor(true)
         allSpawn.append(position)
+
       }
     }
     allSpawn
@@ -169,7 +173,7 @@ class Map(val mapName:String) extends Disposable {
     }
   }
 
-  def generateSand(): Unit = {
+  def createSand(): Unit = {
     val map: TiledMap = new TmxMapLoader().load(MAP_PATH)
     val sandLayer = map.getLayers.get("sand").asInstanceOf[TiledMapTileLayer]
 
@@ -190,17 +194,14 @@ class Map(val mapName:String) extends Disposable {
       )
 
       if (cell != null) {
-        count += 1
+        
         // Sensor: the car drives over the sand (no bounce) but the contact is
         // still reported to GameContactListener, which flips Player.onSand.
         val sand = new Sand(position, Map.tileWidth, Map.tileHeight)
         sand.setSensor(true)
       }
-
-
+      
     }
-    println(s"number of sand cells ${count}")
-    //allSandHitBox
   }
 
 }

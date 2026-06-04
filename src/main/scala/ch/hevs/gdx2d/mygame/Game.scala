@@ -39,15 +39,15 @@ class Game(var number_player: Int, var map_name: String) extends DesktopApplicat
     //load the whole map
     mapsManager.load(assets.getMap())
     //find the checkpoints and group them (depending on the map) and add a hitbox on them
-    assets.findCheckPoints(assets.findCheckPointBlocksCoords())
+    val checkpoints = assets.findCheckPoints(assets.findCheckPointBlocksCoords())
     //generate the walls
     assets.generateHitBoxes()
     //generate the sand
-    assets.generateSand()
+    assets.createSand()
     //install the SINGLE contact listener for the whole physics world
     world.setContactListener(new GameContactListener)
     //creates the car (to change depending on player
-    c1 = new Player(new Vector2(assets.spawnPlacementForTheCar()(0)))
+    c1 = new Player(new Vector2(assets.createSpawnPlacementAndFinishForTheCar()(0)) , checkpoints.length) //TODO
 
   }
 
@@ -66,7 +66,7 @@ class Game(var number_player: Int, var map_name: String) extends DesktopApplicat
     camera.update()
 
     mapsManager.render(camera)
-    println(timer1.getTime())
+    //println(timer1.getTime())
 
   }
 

@@ -2,6 +2,8 @@ package ch.hevs.gdx2d.mygame
 
 import com.badlogic.gdx.physics.box2d.{Contact, ContactImpulse, ContactListener, Manifold}
 
+import scala.collection.mutable.ArrayBuffer
+
 /**
  * The single contact listener for the whole Box2D world.
  *
@@ -41,8 +43,22 @@ class GameContactListener extends ContactListener {
           p.onSand = begin
           if (begin) println("hit sand") else println("left sand")
         case _: Wall =>
-          if (begin) println("hit wall")
-        case _ => () // car touched something else: ignore
+          if (begin) println("hit wall") else println("left wall")
+        case x: LittleCheckpoint =>
+          if (begin) {
+            println(p.stateOfTheCheckpoint(x.c.number))
+
+            p.stateOfTheCheckpoint(x.c.number) = true
+
+            println(p.stateOfTheCheckpoint(x.c.number))
+          } else println("left checkpoint")
+        case _: Finish =>
+          if (begin) {
+            p.logicForTheFinishBloc(p.stateOfTheCheckpoint,p.nDrivenLapsInClass)
+          }
+          else println("left Finish")
+        // car touched something else: ignore
+
       }
       
     case _ => () // not the car: ignore
