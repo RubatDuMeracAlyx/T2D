@@ -31,7 +31,7 @@ class Menu() extends DesktopApplication(1920, 1080) {
   private var map2 : TextButton = _
 
   var nbr_player : Int = 1
-  var map_name : String = "first map"
+  var map_name : String = "firstMap"
 
 
 
@@ -57,11 +57,11 @@ class Menu() extends DesktopApplication(1920, 1080) {
     newGameButton.setWidth(buttonWidth)
     newGameButton.setHeight(buttonHeight)
 
-    map1 = new TextButton("first map", skin)
+    map1 = new TextButton("firstMap", skin)
     map1.setWidth(buttonWidth/2)
     map1.setHeight(buttonHeight/2)
 
-    map2 = new TextButton("second map", skin)
+    map2 = new TextButton("secondMap", skin)
     map2.setWidth(buttonWidth/2)
     map2.setHeight(buttonHeight/2)
 
@@ -181,7 +181,7 @@ class Menu() extends DesktopApplication(1920, 1080) {
     })
     map1.addListener(new ClickListener() {
       override def clicked(event: InputEvent, x: Float, y: Float): Unit = {
-        map_name = "first map"
+        map_name = "firstMap"
         map1.setColor(Color.RED)
         map2.setColor(Color.valueOf("ffffffff"))
 
@@ -190,7 +190,7 @@ class Menu() extends DesktopApplication(1920, 1080) {
     })
     map2.addListener(new ClickListener() {
       override def clicked(event: InputEvent, x: Float, y: Float): Unit = {
-        map_name = "second map"
+        map_name = "secondMap"
         map2.setColor(Color.RED)
         map1.setColor(Color.valueOf("ffffffff"))
 

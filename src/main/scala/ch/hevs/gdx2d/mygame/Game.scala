@@ -14,7 +14,7 @@ class Game(var number_player: Int, var map_name: String) extends DesktopApplicat
 
   //putting all the variables that will change later here
   private var world: World = _
-  val assets: Map = new Map("firstMap")
+  val assets: Map = new Map(map_name)
   val mapsManager: MapsManager = new MapsManager
   //to move later (one for each player)
   private var c1:Player = _
@@ -30,6 +30,7 @@ class Game(var number_player: Int, var map_name: String) extends DesktopApplicat
     //loads the assets
     assets.loadAll()
     assets.manager.finishLoading()
+
 
     //applying forces to the world and removing gravity (top view game)
     world = PhysicsWorld.getInstance()
@@ -54,6 +55,7 @@ class Game(var number_player: Int, var map_name: String) extends DesktopApplicat
   override def onGraphicRender(g: GdxGraphics): Unit = {
     //clears the frame
     g.clear()
+
     PhysicsWorld.updatePhysics(Gdx.graphics.getDeltaTime)
 
     c1.draw(g)
@@ -65,6 +67,7 @@ class Game(var number_player: Int, var map_name: String) extends DesktopApplicat
 
     mapsManager.render(camera)
     println(timer1.getTime())
+
   }
 
   override def onKeyUp(keycode: Int): Unit = {

@@ -202,6 +202,7 @@ class Map(val mapName:String) extends Disposable {
     println(s"number of sand cells ${count}")
     //allSandHitBox
   }
+
 }
 
 
