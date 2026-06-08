@@ -22,6 +22,7 @@ class Player(var playerNbr : Int ,var position: Vector2, nCheckpoints: Int) exte
   var stateOfTheCheckpoint : ArrayBuffer[Boolean] = ArrayBuffer.empty
   var nDrivenLapsInClass : Int = 0
   var finished : Boolean = false
+  var pos:Vector2 = _
 
   createTheStateOfTheCheckpoint(nCheckpoints)
 
@@ -91,7 +92,7 @@ class Player(var playerNbr : Int ,var position: Vector2, nCheckpoints: Int) exte
       true)
 
     //position of the car
-    val pos = this.getBodyPosition
+    pos = this.getBodyPosition
     //apply the speed
     g.drawAlphaPicture(pos.x, pos.y, this.getBodyAngleDeg, .5f, 1f, carImage)
   }

@@ -66,9 +66,14 @@ class Game(var number_player: Int, var map_name: String) extends DesktopApplicat
     val camera: OrthographicCamera = g.getCamera
     mapsManager.render(camera)
 
+
+    //draw things here and not anywhere else
     for (i <- 0 until  number_player) {
       players(i).draw(g)
     }
+    g.drawString(players(debugPlayer).pos.x, players(debugPlayer).pos.y, timer1.getTime().toString)
+
+
 
     g.moveCamera(players(debugPlayer).getBodyPosition.x - 1920 / 2 * zoom, players(debugPlayer).getBodyPosition.y - 1080 / 2 * zoom) //TODO MOOVE ALL THE CAMERA TO EVERY PLAYERS
     g.zoom(zoom)
