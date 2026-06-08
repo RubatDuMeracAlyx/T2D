@@ -64,10 +64,10 @@ class Map(val mapName:String) extends Disposable {
     val vec24 : Vector2 = new Vector2(vec2.x,vec2.y-1)
 
     for (i <- listOfVec2){
-      if (i.x == vec21.x && i.y == vec21.y){existingNeighbors.addOne(vec21)}
-      if (i.x == vec22.x && i.y == vec22.y){existingNeighbors.addOne(vec22)}
-      if (i.x == vec23.x && i.y == vec23.y){existingNeighbors.addOne(vec23)}
-      if (i.x == vec24.x && i.y == vec24.y){existingNeighbors.addOne(vec24)}
+      if (i.x == vec21.x && i.y == vec21.y){existingNeighbors.append(vec21)}
+      if (i.x == vec22.x && i.y == vec22.y){existingNeighbors.append(vec22)}
+      if (i.x == vec23.x && i.y == vec23.y){existingNeighbors.append(vec23)}
+      if (i.x == vec24.x && i.y == vec24.y){existingNeighbors.append(vec24)}
     }
     existingNeighbors
   }
@@ -87,7 +87,7 @@ class Map(val mapName:String) extends Disposable {
 
     while (checkPointBlocks.length != 0) {
       val checkpoint: ArrayBuffer[Vector2] = ArrayBuffer.empty
-      checkpoint.addOne(checkPointBlocks(0))
+      checkpoint.append(checkPointBlocks(0))
       val firstFoundedBlock: Vector2 = checkPointBlocks(0)
       checkPointBlocks.remove(0)
       val toExplore: ArrayBuffer[Vector2] = ArrayBuffer(firstFoundedBlock)
@@ -96,8 +96,8 @@ class Map(val mapName:String) extends Disposable {
         toExplore.remove(0)
         val neighbors = existingNeighbors(current,checkPointBlocks)
         for (n <- neighbors){
-          toExplore.addOne(n)
-          checkpoint.addOne(n)
+          toExplore.append(n)
+          checkpoint.append(n)
         }
         for (n <- neighbors) {
           val toDelete: Int = findEqualsIndex(n, checkPointBlocks)
@@ -106,7 +106,7 @@ class Map(val mapName:String) extends Disposable {
           }
         }
       }
-      checkpoints.addOne(checkpoint)
+      checkpoints.append(checkpoint)
     }
 
     createCheckPoints(checkpoints)

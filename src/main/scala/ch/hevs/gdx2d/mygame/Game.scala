@@ -61,16 +61,20 @@ class Game(var number_player: Int, var map_name: String) extends DesktopApplicat
 
     PhysicsWorld.updatePhysics(Gdx.graphics.getDeltaTime)
 
+
+
+    val camera: OrthographicCamera = g.getCamera
+    mapsManager.render(camera)
+
     for (i <- 0 until  number_player) {
       players(i).draw(g)
     }
 
-    val camera: OrthographicCamera = g.getCamera
     g.moveCamera(players(debugPlayer).getBodyPosition.x - 1920 / 2 * zoom, players(debugPlayer).getBodyPosition.y - 1080 / 2 * zoom) //TODO MOOVE ALL THE CAMERA TO EVERY PLAYERS
     g.zoom(zoom)
     camera.update()
 
-    mapsManager.render(camera)
+
     //println(timer1.getTime())
 
   }

@@ -53,7 +53,7 @@ class Player(var playerNbr : Int ,var position: Vector2, nCheckpoints: Int) exte
 
   def createTheStateOfTheCheckpoint (nCheckpoints : Int) : Unit= {
     for (i <- 0 until nCheckpoints){
-      stateOfTheCheckpoint.addOne(false)
+      stateOfTheCheckpoint.append(false)
     }
   }
   
@@ -93,7 +93,7 @@ class Player(var playerNbr : Int ,var position: Vector2, nCheckpoints: Int) exte
     //position of the car
     val pos = this.getBodyPosition
     //apply the speed
-    g.drawTransformedPicture(pos.x, pos.y, this.getBodyAngleDeg, .5f, carImage)
+    g.drawAlphaPicture(pos.x, pos.y, this.getBodyAngleDeg, .5f, 1f, carImage)
   }
   def getDistanceVector(box:PhysicsBox):Float={
     return (Math.sqrt(Math.pow(box.getBodyLinearVelocity.x,2)+Math.pow(box.getBodyLinearVelocity.y,2)).toFloat)
