@@ -9,10 +9,9 @@ import com.badlogic.gdx.math.Vector2
 
 import scala.collection.mutable.ArrayBuffer
 
-class Player(var position: Vector2, nCheckpoints: Int) extends PhysicsBox("car", position, 150f, 45f, math.toRadians(90.0).toFloat){
+class Player(var playerNbr : Int ,var position: Vector2, nCheckpoints: Int) extends PhysicsBox(playerNbr.toString, position, 150f, 45f, math.toRadians(90.0).toFloat){
   var accelerate: Boolean = false
-
-  private val carImage = new BitmapImage("data/res/CARS/BLUECAR/blueCar.png")
+  val carImage = new BitmapImage("data/res/CARS/BLUECAR/blueCar" + (playerNbr + 1) + ".png")
   var driveUp = 0f
   var driftLeft = false
   var driftRight = false
@@ -26,7 +25,9 @@ class Player(var position: Vector2, nCheckpoints: Int) extends PhysicsBox("car",
 
   createTheStateOfTheCheckpoint(nCheckpoints)
 
-  def didIWentThoughAllTheCheckpoints (checkpointState: ArrayBuffer[Boolean]) : Boolean = {
+  // TODO def everyoneFinished (arrayBuffer: ArrayBuffer[Player]) : Unit = {}
+
+  def wentThoughAllCP (checkpointState: ArrayBuffer[Boolean]) : Boolean = {
     var result : Boolean = true
 
     for (c <- checkpointState){
@@ -37,11 +38,11 @@ class Player(var position: Vector2, nCheckpoints: Int) extends PhysicsBox("car",
   }
 
   def logicForTheFinishBloc(checkpointState: ArrayBuffer[Boolean], nDrivenLapsInFunc: Int): Unit = {
-    if (didIWentThoughAllTheCheckpoints(checkpointState) == true && nDrivenLapsInClass == 2){
+    if (wentThoughAllCP(checkpointState) == true && nDrivenLapsInClass == 2){ // checking if the player went though every CP and if he did 3 laps
       finished = true
       println("FINISHED!")
     }
-    else if (didIWentThoughAllTheCheckpoints(checkpointState) == true){
+    else if (wentThoughAllCP(checkpointState) == true){ // checking if the player went though every CP
       nDrivenLapsInClass += 1
       for (i <- checkpointState.indices){
         checkpointState(i) = false
@@ -97,7 +98,7 @@ class Player(var position: Vector2, nCheckpoints: Int) extends PhysicsBox("car",
   def getDistanceVector(box:PhysicsBox):Float={
     return (Math.sqrt(Math.pow(box.getBodyLinearVelocity.x,2)+Math.pow(box.getBodyLinearVelocity.y,2)).toFloat)
   }
-}
+} 
 
 
 

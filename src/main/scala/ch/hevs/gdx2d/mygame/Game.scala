@@ -17,12 +17,13 @@ class Game(var number_player: Int, var map_name: String) extends DesktopApplicat
   val assets: Map = new Map(map_name)
   val mapsManager: MapsManager = new MapsManager
   //to move later (one for each player)
-  private var c1:Player = _
+  private var players: Array[Player] = Array.ofDim(number_player)
   //for the walls
-  private var hitboxes: ArrayBuffer[PhysicsStaticBox] = _
+  private var hitboxes: ArrayBuffer[PhysicsStaticBox] = ArrayBuffer[PhysicsStaticBox]()
   //camera zoom (to change later)
   var zoom = 2f
   var timer1 = new Timer()
+  var debugPlayer = 0
 
 
   override def onInit(): Unit = {
@@ -47,8 +48,10 @@ class Game(var number_player: Int, var map_name: String) extends DesktopApplicat
     //install the SINGLE contact listener for the whole physics world
     world.setContactListener(new GameContactListener)
     //creates the car (to change depending on player
-    c1 = new Player(new Vector2(assets.createSpawnPlacementAndFinishForTheCar()(0)) , checkpoints.length) //TODO
 
+    for (i <- 0 until number_player){
+      players(i) = new Player(i,new Vector2(assets.createSpawnPlacementAndFinishForTheCar()(i)) , checkpoints.length)
+    }
   }
 
   //every frame
@@ -58,10 +61,12 @@ class Game(var number_player: Int, var map_name: String) extends DesktopApplicat
 
     PhysicsWorld.updatePhysics(Gdx.graphics.getDeltaTime)
 
-    c1.draw(g)
+    for (i <- 0 until  number_player) {
+      players(i).draw(g)
+    }
 
     val camera: OrthographicCamera = g.getCamera
-    g.moveCamera(c1.getBodyPosition.x - 1920 / 2 * zoom, c1.getBodyPosition.y - 1080 / 2 * zoom)
+    g.moveCamera(players(debugPlayer).getBodyPosition.x - 1920 / 2 * zoom, players(debugPlayer).getBodyPosition.y - 1080 / 2 * zoom) //TODO MOOVE ALL THE CAMERA TO EVERY PLAYERS
     g.zoom(zoom)
     camera.update()
 
@@ -72,30 +77,30 @@ class Game(var number_player: Int, var map_name: String) extends DesktopApplicat
 
   override def onKeyUp(keycode: Int): Unit = {
     keycode match {
-      case Input.Keys.LEFT => c1.driftLeft = false
-      case Input.Keys.RIGHT => c1.driftRight = false
-      case Input.Keys.UP => c1.driveUp = 0f
-      case Input.Keys.DOWN => c1.driveDown = 0f
-      case Input.Keys.SPACE => c1.boost = false
-      //case Input.Keys.R => c1.derapage = false
+      case Input.Keys.LEFT => players(debugPlayer).driftLeft = false
+      case Input.Keys.RIGHT => players(debugPlayer).driftRight = false
+      case Input.Keys.UP => players(debugPlayer).driveUp = 0f
+      case Input.Keys.DOWN => players(debugPlayer).driveDown = 0f
+      case Input.Keys.SPACE => players(debugPlayer).boost = false
+      //case Input.Keys.R => players(0).derapage = false
       case _ => ()
     }
   }
 
   override def onKeyDown(keycode: Int): Unit = {
     keycode match {
-      case Input.Keys.LEFT => c1.driftLeft = true
-      case Input.Keys.RIGHT => c1.driftRight = true
-      case Input.Keys.UP => c1.driveUp = Car.MAX_THRUST
-      case Input.Keys.DOWN => c1.driveDown = Car.MAX_THRUST
-      case Input.Keys.SPACE => c1.boost = true
+      case Input.Keys.LEFT => players(debugPlayer).driftLeft = true
+      case Input.Keys.RIGHT => players(debugPlayer).driftRight = true
+      case Input.Keys.UP => players(debugPlayer).driveUp = Car.MAX_THRUST
+      case Input.Keys.DOWN => players(debugPlayer).driveDown = Car.MAX_THRUST
+      case Input.Keys.SPACE => players(debugPlayer).boost = true
       case Input.Keys.ESCAPE => Gdx.app.exit()
         new Thread(() => {
           Thread.sleep(200)
           var menu : Menu= new Menu()
           menu.launch()
         }).start()
-      //case Input.Keys.R => c1.derapage = true
+      //case Input.Keys.R => players(0).derapage = true
       case _ => ()
     }
   }
