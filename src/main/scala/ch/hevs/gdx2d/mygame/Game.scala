@@ -43,8 +43,9 @@ class Game(var number_player: Int, var map_name: String) extends DesktopApplicat
     val checkpoints = assets.findCheckPoints(assets.findCheckPointBlocksCoords())
     //generate the walls
     assets.generateHitBoxes()
-    //generate the sand
+    //generate the sand and grass
     assets.createSand()
+    assets.createGrass()
     //install the SINGLE contact listener for the whole physics world
     world.setContactListener(new GameContactListener)
     //creates the car (to change depending on player

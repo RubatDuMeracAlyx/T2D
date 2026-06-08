@@ -18,10 +18,13 @@ class Player(var playerNbr : Int ,var position: Vector2, nCheckpoints: Int) exte
   var driveDown = 0f
   var boost = false
   var speed = 0f
-  var onSand = false
   var stateOfTheCheckpoint : ArrayBuffer[Boolean] = ArrayBuffer.empty
   var nDrivenLapsInClass : Int = 0
   var finished : Boolean = false
+  var onSand = false
+  val sandReductionFactor = 0.2f
+  var onGrass = false
+  val grassReductionFactor = 0.1f
   var pos:Vector2 = _
 
   createTheStateOfTheCheckpoint(nCheckpoints)
@@ -39,7 +42,7 @@ class Player(var playerNbr : Int ,var position: Vector2, nCheckpoints: Int) exte
   }
 
   def logicForTheFinishBloc(checkpointState: ArrayBuffer[Boolean], nDrivenLapsInFunc: Int): Unit = {
-    if (wentThoughAllCP(checkpointState) == true && nDrivenLapsInClass == 2){ // checking if the player went though every CP and if he did 3 laps
+    if (wentThoughAllCP(checkpointState) == true && nDrivenLapsInClass == 3){ // checking if the player went though every CP and if he did 3 laps
       finished = true
       println("FINISHED!")
     }
@@ -48,7 +51,7 @@ class Player(var playerNbr : Int ,var position: Vector2, nCheckpoints: Int) exte
       for (i <- checkpointState.indices){
         checkpointState(i) = false
       }
-      println(checkpointState)
+      println("lap " + nDrivenLapsInClass + " / 3")
     }
   }
 
@@ -76,15 +79,47 @@ class Player(var playerNbr : Int ,var position: Vector2, nCheckpoints: Int) exte
     if(this.getBodyAngularVelocity < 0)this.applyBodyTorque(DRAG_TORQUE, true)
 
     //goes backward
-    this.applyBodyForceToCenter(
-      -math.cos(this.getBodyAngle.toDouble).toFloat * driveDown,
-      -math.sin(this.getBodyAngle.toDouble).toFloat * driveDown,
-      true)
+    if(onSand){
+      this.applyBodyForceToCenter(
+        -math.cos(this.getBodyAngle.toDouble).toFloat * driveDown * sandReductionFactor,
+        -math.sin(this.getBodyAngle.toDouble).toFloat * driveDown * sandReductionFactor,
+        true)
+    }
+    else if (onGrass){
+      this.applyBodyForceToCenter(
+        -math.cos(this.getBodyAngle.toDouble).toFloat * driveDown * grassReductionFactor,
+        -math.sin(this.getBodyAngle.toDouble).toFloat * driveDown * grassReductionFactor,
+        true)
+    }
+    else {
+      this.applyBodyForceToCenter(
+        -math.cos(this.getBodyAngle.toDouble).toFloat * driveDown,
+        -math.sin(this.getBodyAngle.toDouble).toFloat * driveDown,
+        true)
+    }
     //goes forward
-    this.applyBodyForceToCenter(
-      math.cos(this.getBodyAngle.toDouble).toFloat * driveUp,
-      math.sin(this.getBodyAngle.toDouble).toFloat * driveUp,
-      true)
+    if(onSand) {
+      this.applyBodyForceToCenter(
+        math.cos(this.getBodyAngle.toDouble).toFloat * driveUp * sandReductionFactor,
+        math.sin(this.getBodyAngle.toDouble).toFloat * driveUp * sandReductionFactor,
+        true)
+    }
+    else if (onGrass){
+      this.applyBodyForceToCenter(
+        math.cos(this.getBodyAngle.toDouble).toFloat * driveUp * grassReductionFactor,
+        math.sin(this.getBodyAngle.toDouble).toFloat * driveUp * grassReductionFactor,
+        true)
+    }
+
+    else{
+
+      this.applyBodyForceToCenter(
+        math.cos(this.getBodyAngle.toDouble).toFloat * driveUp,
+        math.sin(this.getBodyAngle.toDouble).toFloat * driveUp,
+        true)
+    }
+
+
     //stops the inertia of the car
     this.applyBodyForceToCenter(
       this.getBodyLinearVelocity.x * -DRAG_THRUST * speed,

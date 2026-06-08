@@ -40,28 +40,39 @@ class GameContactListener extends ContactListener {
     case p: Player =>
       other match {
         case _: Sand =>
-          p.onSand = begin
-          if (begin) println("hit sand") else println("left sand")
+
+          if (begin) {
+            p.onSand = false
+            p.onSand = true
+          }
+          else {
+            p.onSand = false
+          }
+
+        case _: Grass =>
+
+          if (begin) {
+            p.onGrass = false
+            p.onGrass = true
+          }
+          else {
+            p.onGrass = false
+          }
 
 
         case _: Wall =>
-          if (begin) println("hit wall") else println("left wall")
-
 
         case lilCP: LittleCheckpoint =>
           if (begin) {
 
             p.stateOfTheCheckpoint(lilCP.c.number) = true
 
-          } else println("left checkpoint")
-
+          }
 
         case _: Finish =>
           if (begin) {
             p.logicForTheFinishBloc(p.stateOfTheCheckpoint,p.nDrivenLapsInClass)
           }
-          else println("left Finish")
-        // car touched something else: ignore
 
         case _: Player => ()
       }

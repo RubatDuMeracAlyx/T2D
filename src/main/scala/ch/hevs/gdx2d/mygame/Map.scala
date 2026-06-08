@@ -31,7 +31,6 @@ class Map(val mapName:String) extends Disposable {
     manager.dispose()
   }
   
-  //  val grassLayer = map.getLayers.get("grass").asInstanceOf[TiledMapTileLayer]
   //  val roadLayer = map.getLayers.get("road").asInstanceOf[TiledMapTileLayer]
   //  val sandLayer = map.getLayers.get("sand").asInstanceOf[TiledMapTileLayer]
 
@@ -204,6 +203,34 @@ class Map(val mapName:String) extends Disposable {
     }
   }
 
+  def createGrass(): Unit = {
+    val map: TiledMap = new TmxMapLoader().load(MAP_PATH)
+    val grassLayer = map.getLayers.get("grass").asInstanceOf[TiledMapTileLayer]
+
+    if (!grassLayer.isVisible)
+      return
+
+    val mapWidth = grassLayer.getWidth
+    val mapHeight = grassLayer.getHeight
+
+    var count: Int = 0
+
+    for (x <- 0 until mapWidth; y <- 0 until mapHeight) {
+      val cell = grassLayer.getCell(x, y)
+
+      val position = new Vector2(
+        x * Map.tileWidth + Map.tileWidth / 2f,
+        y * Map.tileHeight + Map.tileHeight / 2f
+      )
+
+      if (cell != null) {
+
+        val grass = new Grass(position, Map.tileWidth, Map.tileHeight)
+        grass.setSensor(true)
+      }
+
+    }
+  }
 }
 
 
