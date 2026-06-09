@@ -44,6 +44,7 @@ class Menu() extends DesktopApplication(1920, 1080) {
     val selectboxHeight = 50f
 
 
+
     setTitle("Menu")
 
     stage = new Stage()
@@ -106,7 +107,9 @@ class Menu() extends DesktopApplication(1920, 1080) {
     player4_btn.setPosition(getWindowWidth / 4f - buttonWidth / 1.89f +160, getWindowHeight * 0.45f -100)
 
 
-   // newGameButton.setColor(Color.valueOf("FF0000"))
+   // set les couleurs des valeurs de base des boutons
+    map1.setColor(Color.RED)
+    player1_btn.setColor(Color.RED)
 
 
     // ajouter les boutons au stage (la fenetre)

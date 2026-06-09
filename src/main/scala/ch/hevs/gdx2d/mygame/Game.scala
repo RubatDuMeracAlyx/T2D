@@ -5,9 +5,13 @@ import ch.hevs.gdx2d.desktop.DesktopApplication
 import ch.hevs.gdx2d.lib.GdxGraphics
 import ch.hevs.gdx2d.lib.physics.PhysicsWorld
 import com.badlogic.gdx.{Gdx, Input}
-import com.badlogic.gdx.graphics.OrthographicCamera
+import com.badlogic.gdx.graphics.{Color, OrthographicCamera}
+import com.badlogic.gdx.graphics.g2d.BitmapFont
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.World
+
 import scala.collection.mutable.ArrayBuffer
 
 class Game(var number_player: Int, var map_name: String) extends DesktopApplication(1920, 1080) {
@@ -24,6 +28,7 @@ class Game(var number_player: Int, var map_name: String) extends DesktopApplicat
   var zoom = 2f
   var timer1 = new Timer()
   var debugPlayer = 0
+  private var font: BitmapFont = _
 
 
   override def onInit(): Unit = {
@@ -31,6 +36,14 @@ class Game(var number_player: Int, var map_name: String) extends DesktopApplicat
     //loads the assets
     assets.loadAll()
     assets.manager.finishLoading()
+    val optimusF = Gdx.files.internal("font/OptimusPrinceps.ttf")
+
+    val parameter = new FreeTypeFontParameter
+
+    var generator = new FreeTypeFontGenerator(optimusF)
+    parameter.size = generator.scaleForPixelHeight(60)
+    parameter.color = Color.BLACK
+    font = generator.generateFont(parameter)
 
 
     //applying forces to the world and removing gravity (top view game)
@@ -71,8 +84,11 @@ class Game(var number_player: Int, var map_name: String) extends DesktopApplicat
     //draw things here and not anywhere else
     for (i <- 0 until  number_player) {
       players(i).draw(g)
+
     }
-    g.drawString(players(debugPlayer).pos.x, players(debugPlayer).pos.y, timer1.getTime().toString)
+    g.drawString(players(debugPlayer).pos.x+1820-150, players(debugPlayer).pos.y+980, timer1.getTime().toString,font)
+    g.drawString(players(debugPlayer).pos.x+1820-200, players(debugPlayer).pos.y+980-100, s"tour ${(players(debugPlayer).nDrivenLapsInClass+1).toString}/3", font)
+    g.drawString(players(debugPlayer).pos.x+1820-200, players(debugPlayer).pos.y+980-200, s"${(players(debugPlayer).speed*10).toInt} km/h", font)
 
 
 
