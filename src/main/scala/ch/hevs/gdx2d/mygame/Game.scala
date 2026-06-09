@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.World
+import com.badlogic.gdx.utils.viewport.StretchViewport
 
 import scala.collection.mutable.ArrayBuffer
 
@@ -30,6 +31,8 @@ class Game(var number_player: Int, var map_name: String) extends DesktopApplicat
   var debugPlayer = 0
   private var font: BitmapFont = _
 
+  var viewP1 = new StretchViewport(800, 400)
+  var viewP2 = new StretchViewport(800, 400)
 
   override def onInit(): Unit = {
     setTitle(map_name)
@@ -70,33 +73,52 @@ class Game(var number_player: Int, var map_name: String) extends DesktopApplicat
 
   //every frame
   override def onGraphicRender(g: GdxGraphics): Unit = {
-    //clears the frame
+    //clear the whole screen
     g.clear()
+    //updates physics
     PhysicsWorld.updatePhysics(Gdx.graphics.getDeltaTime)
 
-    val camera: OrthographicCamera = g.getCamera
+    //get windows size values
+    val camera = g.getCamera
+
+    //player 1
+    //makes it so that it draws only on the left part of the screen
+    Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth/2, Gdx.graphics.getHeight)
+    //moving camera on the first player
+    g.moveCamera(players(0).getBodyPosition.x - 1920 / 2 * zoom, players(0).getBodyPosition.y - 1080 / 2 * zoom)
+    g.zoom(zoom)
+    //apply changes
+    camera.update()
+
+    //draws the map seen from the first player viewpoint
     mapsManager.render(camera)
-
-
-
-    //draw things here and not anywhere else
-    for (i <- 0 until  number_player) {
+    for (i <- 0 until number_player) {
       players(i).draw(g)
-
     }
-    // draw le time le nombre de tour et la vitesse de la voiture grace a la position du player et le font
-    g.drawString(players(debugPlayer).pos.x+1820-150, players(debugPlayer).pos.y+980, timer1.getTime().toString,font)
-    g.drawString(players(debugPlayer).pos.x+1820-200, players(debugPlayer).pos.y+980-100, s"tour ${(players(debugPlayer).nDrivenLapsInClass+1).toString}/3", font)
-    g.drawString(players(debugPlayer).pos.x+1820-200, players(debugPlayer).pos.y+980-200, s"${(players(debugPlayer).speed*10).toInt} km/h", font)
+
+    /*Tried to move the text where it's supposed to go but it appears to everyone
+    g.drawString(player(0).pos.x + 1820 - 150, player(0).pos.y + 980, timer1.getTime().toString, font)
+    g.drawString(player(0).pos.x + 1820 - 200, player(0).pos.y + 980 - 100, s"tour ${(p1.nDrivenLapsInClass + 1).toString}/3", font)
+    g.drawString(player(0).pos.x + 1820 - 200, player(0).pos.y + 980 - 200, s"${(p1.speed * 10).toInt} km/h", font)*/
 
 
+    //player 2
+    Gdx.gl.glViewport(Gdx.graphics.getWidth/2, 0, Gdx.graphics.getWidth/2, Gdx.graphics.getHeight)
 
-    g.moveCamera(players(debugPlayer).getBodyPosition.x - 1920 / 2 * zoom, players(debugPlayer).getBodyPosition.y - 1080 / 2 * zoom) //TODO MOOVE ALL THE CAMERA TO EVERY PLAYERS
+    val p2 = players(1)
+    g.moveCamera(p2.getBodyPosition.x - 1920 / 4 * zoom, p2.getBodyPosition.y - 1080 / 2 * zoom)
     g.zoom(zoom)
     camera.update()
 
+    mapsManager.render(camera)
+    for (i <- 0 until number_player) {
+      players(i).draw(g)
+    }
 
-    //println(timer1.getTime())
+
+
+
+    Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth, Gdx.graphics.getHeight)
 
   }
 

@@ -19,10 +19,6 @@ class Map(val mapName:String) extends Disposable {
     manager.load(MAP_PATH, classOf[TiledMap])
   }
 
-  def updateLoading(): Boolean = {
-    manager.update()
-  }
-
   def getMap(): TiledMap = {
     manager.get(MAP_PATH, classOf[TiledMap])
   }
@@ -232,9 +228,6 @@ class Map(val mapName:String) extends Disposable {
     }
   }
 }
-
-
-
 
 object Map {
   val tileWidth = 128
