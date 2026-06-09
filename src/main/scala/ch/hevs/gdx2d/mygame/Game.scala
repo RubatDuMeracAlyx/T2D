@@ -72,13 +72,11 @@ class Game(var number_player: Int, var map_name: String) extends DesktopApplicat
   override def onGraphicRender(g: GdxGraphics): Unit = {
     //clears the frame
     g.clear()
-
     PhysicsWorld.updatePhysics(Gdx.graphics.getDeltaTime)
-
-
 
     val camera: OrthographicCamera = g.getCamera
     mapsManager.render(camera)
+
 
 
     //draw things here and not anywhere else
