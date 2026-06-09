@@ -54,10 +54,12 @@ class Menu() extends DesktopApplication(1920, 1080) {
 
     background = new Texture(Gdx.files.internal("data/res/MenuT2D.png"))
 
+    // bouton qui lance le jeux
     newGameButton = new TextButton("New game", skin)
     newGameButton.setWidth(buttonWidth)
     newGameButton.setHeight(buttonHeight)
 
+    // bouton selectionnant la map
     map1 = new TextButton("firstMap", skin)
     map1.setWidth(buttonWidth/2)
     map1.setHeight(buttonHeight/2)
@@ -66,7 +68,7 @@ class Menu() extends DesktopApplication(1920, 1080) {
     map2.setWidth(buttonWidth/2)
     map2.setHeight(buttonHeight/2)
 
-
+    // bouton selectionnant le nombre de joueur
     player1_btn = new TextButton("1 player", skin)
     player1_btn.setWidth(buttonWidth/2)
     player1_btn.setHeight(buttonHeight/2)
@@ -84,7 +86,7 @@ class Menu() extends DesktopApplication(1920, 1080) {
     player4_btn.setWidth(buttonWidth/2)
     player4_btn.setHeight(buttonHeight/2)
 
-
+    // affiche du texte sur l'écran
     labelmap = new Label("Choose the map", skin)
     labelmap.setWidth(buttonWidth)
     labelmap.setHeight(buttonHeight)
@@ -137,6 +139,9 @@ class Menu() extends DesktopApplication(1920, 1080) {
 
       }
     })
+    // Des qu'un bouton est cliqué change la valeur du nombre de joueur
+    // Met le bouton en rouge et les autres en blanc
+    // Pareil pour les map
     player1_btn.addListener(new ClickListener() {
       override def clicked(event: InputEvent, x: Float, y: Float): Unit = {
           nbr_player = 1

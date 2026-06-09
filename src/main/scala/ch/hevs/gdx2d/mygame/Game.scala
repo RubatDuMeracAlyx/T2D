@@ -84,6 +84,7 @@ class Game(var number_player: Int, var map_name: String) extends DesktopApplicat
       players(i).draw(g)
 
     }
+    // draw le time le nombre de tour et la vitesse de la voiture grace a la position du player et le font
     g.drawString(players(debugPlayer).pos.x+1820-150, players(debugPlayer).pos.y+980, timer1.getTime().toString,font)
     g.drawString(players(debugPlayer).pos.x+1820-200, players(debugPlayer).pos.y+980-100, s"tour ${(players(debugPlayer).nDrivenLapsInClass+1).toString}/3", font)
     g.drawString(players(debugPlayer).pos.x+1820-200, players(debugPlayer).pos.y+980-200, s"${(players(debugPlayer).speed*10).toInt} km/h", font)
