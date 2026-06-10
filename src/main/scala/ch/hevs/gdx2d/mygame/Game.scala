@@ -104,7 +104,8 @@ class Game(var number_player: Int, var map_name: String) extends DesktopApplicat
       //drawing all the players
       for (j <- 0 until number_player) {
         if(players(j).finished && players(j)!=null) {
-          players(j).destroy()
+          players(j).setSensor(false)
+          players(j).setBodyAwake(false)
         }
         else{
           players(j).draw(g)
