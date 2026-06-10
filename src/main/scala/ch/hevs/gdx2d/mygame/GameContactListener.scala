@@ -36,50 +36,51 @@ class GameContactListener extends ContactListener {
   }
 
   /** React when `self` (the car) touches/leaves `other`. */
-  private def react(self: Any, other: Any, begin: Boolean): Unit = self match {
-    case p: Player =>
-      other match {
-        case _: Sand =>
+  private def react(self: Any, other: Any, begin: Boolean): Unit = if(other!= null) {
+    self match {
+      case p: Player =>
+        other match {
+          case _: Sand =>
 
-          if (begin) {
-            p.onSand = false
-            p.onSand = true
-          }
-          else {
-            p.onSand = false
-          }
+            if (begin) {
+              p.onSand = false
+              p.onSand = true
+            }
+            else {
+              p.onSand = false
+            }
 
-        case _: Grass =>
+          case _: Grass =>
 
-          if (begin) {
-            p.onGrass = false
-            p.onGrass = true
-          }
-          else {
-            p.onGrass = false
-          }
+            if (begin) {
+              p.onGrass = false
+              p.onGrass = true
+            }
+            else {
+              p.onGrass = false
+            }
 
 
-        case _: Wall =>
+          case _: Wall =>
 
-        case lilCP: LittleCheckpoint =>
-          if (begin) {
+          case lilCP: LittleCheckpoint =>
+            if (begin) {
 
-            p.stateOfTheCheckpoint(lilCP.c.number) = true
+              p.stateOfTheCheckpoint(lilCP.c.number) = true
 
-          }
+            }
 
-        case _: Finish =>
-          if (begin) {
-            p.logicForTheFinishBloc(p.stateOfTheCheckpoint,p.nDrivenLapsInClass)
-          }
+          case _: Finish =>
+            if (begin) {
+              p.logicForTheFinishBloc(p.stateOfTheCheckpoint, p.nDrivenLapsInClass)
+            }
 
-        case _: Player => ()
-      }
-      
-    case _ => () // not the car: ignore
+          case _: Player => ()
+        }
+
+      case _ => () // not the car: ignore
+    }
   }
-
   // Required by the interface but unused here.
   override def preSolve(contact: Contact, oldManifold: Manifold): Unit = ()
 

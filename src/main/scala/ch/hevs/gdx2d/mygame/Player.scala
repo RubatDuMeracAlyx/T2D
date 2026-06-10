@@ -27,6 +27,7 @@ class Player(var playerNbr : Int ,var position: Vector2, nCheckpoints: Int) exte
   val grassReductionFactor = 0.1f
   var pos:Vector2 = _
 
+
   createTheStateOfTheCheckpoint(nCheckpoints)
 
   // TODO def everyoneFinished (arrayBuffer: ArrayBuffer[Player]) : Unit = {}
@@ -42,9 +43,10 @@ class Player(var playerNbr : Int ,var position: Vector2, nCheckpoints: Int) exte
   }
 
   def logicForTheFinishBloc(checkpointState: ArrayBuffer[Boolean], nDrivenLapsInFunc: Int): Unit = {
-    if (wentThoughAllCP(checkpointState) == true && nDrivenLapsInClass == 3){ // checking if the player went though every CP and if he did 3 laps
+    if (wentThoughAllCP(checkpointState) == true && nDrivenLapsInClass == 0){ // checking if the player went though every CP and if he did 3 laps
       finished = true
       println("FINISHED!")
+
     }
     else if (wentThoughAllCP(checkpointState) == true){ // checking if the player went though every CP
       nDrivenLapsInClass += 1

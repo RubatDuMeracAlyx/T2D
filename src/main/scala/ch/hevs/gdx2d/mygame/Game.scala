@@ -1,5 +1,6 @@
 package ch.hevs.gdx2d.mygame
 
+import ch.hevs.gdx2d.components.bitmaps.BitmapImage
 import ch.hevs.gdx2d.components.physics.primitives.PhysicsStaticBox
 import ch.hevs.gdx2d.desktop.DesktopApplication
 import ch.hevs.gdx2d.lib.GdxGraphics
@@ -30,6 +31,9 @@ class Game(var number_player: Int, var map_name: String) extends DesktopApplicat
   var timer1 = new Timer()
   var debugPlayer = 0
   private var font: BitmapFont = _
+  private var font2: BitmapFont = _
+  var image_finished: BitmapImage = _
+
   //getting width and height for more visibility
   var width = Gdx.graphics.getWidth
   var height = Gdx.graphics.getHeight
@@ -40,7 +44,9 @@ class Game(var number_player: Int, var map_name: String) extends DesktopApplicat
     assets.loadAll()
     assets.manager.finishLoading()
     val optimusF = Gdx.files.internal("font/OptimusPrinceps.ttf")
+    val icePixelF = Gdx.files.internal("font/ice_pixel-7.ttf")
 
+    image_finished = new BitmapImage("data/res/T2D_finished.png")
     val parameter = new FreeTypeFontParameter
 
     var generator = new FreeTypeFontGenerator(optimusF)
@@ -48,6 +54,15 @@ class Game(var number_player: Int, var map_name: String) extends DesktopApplicat
     parameter.color = Color.BLACK
     font = generator.generateFont(parameter)
 
+    generator = new FreeTypeFontGenerator(icePixelF)
+    parameter.size = generator.scaleForPixelHeight(80)
+    parameter.color = Color.WHITE
+    parameter.borderColor = Color.RED
+    parameter.borderWidth = 3f
+    parameter.shadowOffsetY = -8
+    parameter.shadowColor = Color.LIGHT_GRAY
+    font2 = generator.generateFont(parameter)
+    generator.dispose()
 
     //applying forces to the world and removing gravity (top view game)
     world = PhysicsWorld.getInstance()
@@ -65,14 +80,14 @@ class Game(var number_player: Int, var map_name: String) extends DesktopApplicat
     //install the SINGLE contact listener for the whole physics world
     world.setContactListener(new GameContactListener)
 
-    for (i <- 0 until number_player){
-      players(i) = new Player(i,new Vector2(assets.createSpawnPlacementAndFinishForTheCar()(i)) , checkpoints.length)
+    for (i <- 0 until number_player) {
+      players(i) = new Player(i, new Vector2(assets.createSpawnPlacementAndFinishForTheCar()(i)), checkpoints.length)
     }
   }
 
   //every frame
   override def onGraphicRender(g: GdxGraphics): Unit = {
-    //clear the whole screen
+    //clears the whole screen
     g.clear()
     //updates physics
     PhysicsWorld.updatePhysics(Gdx.graphics.getDeltaTime)
@@ -87,38 +102,100 @@ class Game(var number_player: Int, var map_name: String) extends DesktopApplicat
       //drawing the map
       mapsManager.render(g.getCamera)
       //drawing all the players
-      for (j <- 0 until number_player) players(j).draw(g)
+      for (j <- 0 until number_player) {
+        if(players(j).finished && players(j)!=null) {
+          players(j).destroy()
+        }
+        else{
+          players(j).draw(g)
+        }
+      }
+      display_hud(i,g)
       //IMPORTANT we need to tell the program to Flush the current SpriteBatch so that the textures are going to be rendered
       //or else they are staying in the cache and are rendered on the wrong screen
       g.sbFlush()
     }
-  }
 
-  def setupViewport(actualPlayer:Int, g:GdxGraphics): Unit = {
+
+
+
+
+    }
+
+
+
+  def setupViewport(actualPlayer: Int, g: GdxGraphics): Unit = {
     val width = Gdx.graphics.getWidth
     val height = Gdx.graphics.getHeight
     //this is the same for two players because we can just divide the same number by one or two
-    if(number_player == 1 || number_player == 2){
-      Gdx.gl.glViewport(actualPlayer * width/number_player, 0, width/number_player, height)
-      g.getCamera.setToOrtho(false, width * zoom/number_player, height * zoom)
+    if (number_player == 1 || number_player == 2) {
+      Gdx.gl.glViewport(actualPlayer * width / number_player, 0, width / number_player, height)
+      g.getCamera.setToOrtho(false, width * zoom / number_player, height * zoom)
     }
     //since the viewport line changes from 3 players we need to change it for each screen
-    else if(number_player == 3 || number_player == 4){
+    else if (number_player == 3 || number_player == 4) {
       //first player to be rendered on a 4 screen formation and so on
-      if (actualPlayer == 0){
-        Gdx.gl.glViewport(0, height/2, width/2, height/2)
+      if (actualPlayer == 0) {
+        Gdx.gl.glViewport(0, height / 2, width / 2, height / 2)
       }
-      else if (actualPlayer == 1){
-        Gdx.gl.glViewport(width/2, height/2, width/2, height/2)
+      else if (actualPlayer == 1) {
+        Gdx.gl.glViewport(width / 2, height / 2, width / 2, height / 2)
       }
-      else if (actualPlayer == 2){
-        Gdx.gl.glViewport(0, 0, width/2, height/2)
+      else if (actualPlayer == 2) {
+        Gdx.gl.glViewport(0, 0, width / 2, height / 2)
       }
-      else if (actualPlayer == 3){
-        Gdx.gl.glViewport(width/2, 0, width/2, height/2)
+      else if (actualPlayer == 3) {
+        Gdx.gl.glViewport(width / 2, 0, width / 2, height / 2)
       }
       //and after we can set the camera because everyone has the same screen size
-      g.getCamera.setToOrtho(false, width/2 * zoom, height/2 * zoom)
+      g.getCamera.setToOrtho(false, width / 2 * zoom, height / 2 * zoom)
+    }
+  }
+  def display_hud(actualPlayer: Int,g:GdxGraphics):Unit ={
+    var additionalheight = 1620
+    var additionalwidth = 980
+
+    if(number_player==1){
+      if (players(actualPlayer).finished == false) {
+        g.drawString(players(actualPlayer).pos.x+additionalheight, players(actualPlayer).pos.y+additionalwidth, timer1.getTime().toString, font)
+      }
+      else{
+        val finished_time = timer1.stopTime()
+        g.drawPicture(players(actualPlayer).pos.x, players(actualPlayer).pos.y, image_finished)
+        g.drawString(players(actualPlayer).pos.x, players(actualPlayer).pos.y, finished_time.toString, font)
+        g.drawString(players(actualPlayer).pos.x-500, players(actualPlayer).pos.y-100, "press escape to go back to menu", font2)
+      }
+
+      g.drawString(players(actualPlayer).pos.x+additionalheight, players(actualPlayer).pos.y+additionalwidth-100 , s"tour ${(players(actualPlayer).nDrivenLapsInClass+1).toString}/3", font)
+      g.drawString(players(actualPlayer).pos.x+additionalheight, players(actualPlayer).pos.y+additionalwidth-200, s"${(players(actualPlayer).speed * 10).toInt} km/h", font)
+    }
+    if(number_player==2){
+      if (players(actualPlayer).finished == false) {
+        g.drawString(players(actualPlayer).pos.x+additionalheight/2-100, players(actualPlayer).pos.y+additionalwidth, timer1.getTime().toString, font)
+      }
+      else {
+        val finished_time = timer1.stopTime()
+        g.drawPicture(players(actualPlayer).pos.x, players(actualPlayer).pos.y, image_finished)
+        g.drawString(players(actualPlayer).pos.x, players(actualPlayer).pos.y, finished_time.toString, font)
+        g.drawString(players(actualPlayer).pos.x-500, players(actualPlayer).pos.y-100, "press escape to go back to menu", font2)
+      }
+
+      g.drawString(players(actualPlayer).pos.x+additionalheight/2-100 , players(actualPlayer).pos.y+additionalwidth-100, s"tour ${(players(actualPlayer).nDrivenLapsInClass+1).toString}/3", font)
+      g.drawString(players(actualPlayer).pos.x+additionalheight/2-100, players(actualPlayer).pos.y+additionalwidth-200, s"${(players(actualPlayer).speed * 10).toInt} km/h", font)
+    }
+    if(number_player==3 || number_player==4){
+      if (players(actualPlayer).finished == false) {
+        g.drawString(players(actualPlayer).pos.x+additionalheight/2-100, players(actualPlayer).pos.y+additionalwidth/2, timer1.getTime().toString, font)
+      }
+      else {
+        val finished_time = timer1.stopTime()
+        g.drawPicture(players(actualPlayer).pos.x, players(actualPlayer).pos.y, image_finished)
+        g.drawString(players(actualPlayer).pos.x, players(actualPlayer).pos.y, finished_time.toString, font)
+        g.drawString(players(actualPlayer).pos.x-500, players(actualPlayer).pos.y-100, "press escape to go back to menu", font2)
+      }
+
+      g.drawString(players(actualPlayer).pos.x+additionalheight/2-100, players(actualPlayer).pos.y+additionalwidth/2-100, s"tour ${(players(actualPlayer).nDrivenLapsInClass+1).toString}/3", font)
+      g.drawString(players(actualPlayer).pos.x+additionalheight/2-100, players(actualPlayer).pos.y+additionalwidth/2-200, s"${(players(actualPlayer).speed * 10).toInt} km/h", font)
     }
   }
 
@@ -143,8 +220,8 @@ class Game(var number_player: Int, var map_name: String) extends DesktopApplicat
       case Input.Keys.SPACE => players(debugPlayer).boost = true
       case Input.Keys.ESCAPE => Gdx.app.exit()
         new Thread(() => {
-          Thread.sleep(200)
-          var menu : Menu= new Menu()
+          Thread.sleep(400)
+          var menu: Menu = new Menu()
           menu.launch()
         }).start()
       case _ => ()
