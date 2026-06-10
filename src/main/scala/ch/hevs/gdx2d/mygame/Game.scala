@@ -111,6 +111,7 @@ class Game(var number_player: Int, var map_name: String) extends DesktopApplicat
       //drawing all the players
       for (j <- 0 until number_player) {
         if(players(j).finished && players(j)!=null) {
+          //si le joueur atteint l'arrivéé arrete de le dessiner et enleve ces collisions et le stoppe
           players(j).setSensor(false)
           players(j).setBodyAwake(false)
         }
@@ -157,7 +158,9 @@ class Game(var number_player: Int, var map_name: String) extends DesktopApplicat
     var additionalwidth = 980
 
     if(number_player==1){
+      // si le joueur a finit affiche l'ecran de fin et son temps la taille diffère en fct du nbr de joueur
       if (players(actualPlayer).finished == false) {
+        // affiche le temps durant la course
         g.drawString(players(actualPlayer).pos.x+additionalheight, players(actualPlayer).pos.y+additionalwidth, timer1.getTime().toString, font)
       }
       else{
@@ -166,7 +169,7 @@ class Game(var number_player: Int, var map_name: String) extends DesktopApplicat
         g.drawString(players(actualPlayer).pos.x, players(actualPlayer).pos.y, finished_time.toString, font)
         g.drawString(players(actualPlayer).pos.x-500, players(actualPlayer).pos.y-100, "press escape to go back to menu", font2)
       }
-
+      // la vitesse et les tour sont tout le tems affichés
       g.drawString(players(actualPlayer).pos.x+additionalheight, players(actualPlayer).pos.y+additionalwidth-100 , s"tour ${(players(actualPlayer).nDrivenLapsInClass+1).toString}/3", font)
       g.drawString(players(actualPlayer).pos.x+additionalheight, players(actualPlayer).pos.y+additionalwidth-200, s"${(players(actualPlayer).speed * 10).toInt} km/h", font)
     }
