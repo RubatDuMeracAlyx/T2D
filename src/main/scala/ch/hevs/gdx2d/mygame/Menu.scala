@@ -19,6 +19,7 @@ class Menu() extends DesktopApplication(1920, 1080) {
   private var skin: Skin = _
   private var labelmap: Label = _
   private var labelplayer: Label = _
+  private var image : Image = _
   private var background : Texture = _
 
   private var player1_btn : TextButton = _
@@ -39,6 +40,9 @@ class Menu() extends DesktopApplication(1920, 1080) {
   override def onInit(): Unit = {
     val buttonWidth = 300f
     val buttonHeight = 80f
+    val selectboxWidth = 200f
+    val selectboxHeight = 50f
+
 
 
     setTitle("Menu")

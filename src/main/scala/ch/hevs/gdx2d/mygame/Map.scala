@@ -19,6 +19,10 @@ class Map(val mapName:String) extends Disposable {
     manager.load(MAP_PATH, classOf[TiledMap])
   }
 
+  def updateLoading(): Boolean = {
+    manager.update()
+  }
+
   def getMap(): TiledMap = {
     manager.get(MAP_PATH, classOf[TiledMap])
   }
@@ -167,6 +171,33 @@ class Map(val mapName:String) extends Disposable {
       }
     }
   }
+  
+  def createNBoost(num : Int): Array[Boost] = {
+
+    val allBoost : Array[Boost] = Array.ofDim(num)
+    
+    val map: TiledMap = new TmxMapLoader().load(MAP_PATH)
+    val sandLayer = map.getLayers.get("sand").asInstanceOf[TiledMapTileLayer]
+
+    val mapWidth = sandLayer.getWidth
+    val mapHeight = sandLayer.getHeight
+
+    for (i <- 0 until num){
+      val randomWidth = (math.random() * mapWidth).toInt
+      val randomHeight = (math.random() * mapHeight).toInt
+
+      val position = new Vector2(
+        randomWidth * Map.tileWidth + Map.tileWidth / 2f,
+        randomHeight * Map.tileHeight + Map.tileHeight / 2f
+      )
+
+      val boost = new Boost(num, position)
+      boost.setSensor(true)
+
+      allBoost(i) = boost
+    }
+    allBoost
+  }
 
   def createSand(): Unit = {
     val map: TiledMap = new TmxMapLoader().load(MAP_PATH)
@@ -228,6 +259,9 @@ class Map(val mapName:String) extends Disposable {
     }
   }
 }
+
+
+
 
 object Map {
   val tileWidth = 128

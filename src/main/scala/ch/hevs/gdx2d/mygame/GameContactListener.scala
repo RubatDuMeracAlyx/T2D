@@ -36,7 +36,7 @@ class GameContactListener extends ContactListener {
   }
 
   /** React when `self` (the car) touches/leaves `other`. */
-  private def react(self: Any, other: Any, begin: Boolean): Unit = if(other!= null) {
+  private def react(self: Any, other: Any, begin: Boolean): Unit = if (other != null) { // if(other != null) is used because when I destroy an object, other become null and I can't react to something null
     self match {
       case p: Player =>
         other match {
@@ -65,9 +65,12 @@ class GameContactListener extends ContactListener {
 
           case lilCP: LittleCheckpoint =>
             if (begin) {
-
+              p.needStock = true
               p.stateOfTheCheckpoint(lilCP.c.number) = true
 
+            }
+            else {
+              p.needStock = false
             }
 
           case _: Finish =>
@@ -76,11 +79,20 @@ class GameContactListener extends ContactListener {
             }
 
           case _: Player => ()
+
+          case b: Boost =>
+            if (begin) {
+              p.addBoost(b.amount)
+              b.destroy()
+              b.undraw = true
+            }
         }
 
       case _ => () // not the car: ignore
     }
+
   }
+
   // Required by the interface but unused here.
   override def preSolve(contact: Contact, oldManifold: Manifold): Unit = ()
 

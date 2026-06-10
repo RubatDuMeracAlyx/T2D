@@ -12,7 +12,6 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.World
-import com.badlogic.gdx.utils.viewport.StretchViewport
 
 import scala.collection.mutable.ArrayBuffer
 
@@ -24,6 +23,8 @@ class Game(var number_player: Int, var map_name: String) extends DesktopApplicat
   val mapsManager: MapsManager = new MapsManager
   //to move later (one for each player)
   private var players: Array[Player] = Array.ofDim(number_player)
+  private val nBoost : Int = 100
+  private var boosts : Array[Boost] = Array.ofDim(nBoost)
   //for the walls
   private var hitboxes: ArrayBuffer[PhysicsStaticBox] = ArrayBuffer[PhysicsStaticBox]()
   //camera zoom (to change later)
@@ -87,9 +88,11 @@ class Game(var number_player: Int, var map_name: String) extends DesktopApplicat
     //install the SINGLE contact listener for the whole physics world
     world.setContactListener(new GameContactListener)
 
-    for (i <- 0 until number_player) {
-      players(i) = new Player(i, new Vector2(assets.createSpawnPlacementAndFinishForTheCar()(i)), checkpoints.length,tab_timer(i))
+    for (i <- 0 until number_player){
+      players(i) = new Player(i,new Vector2(assets.createSpawnPlacementAndFinishForTheCar()(i*3)) , checkpoints.length, tab_timer(i))
     }
+    //generate 10 boost fuel
+    boosts = assets.createNBoost(nBoost)
   }
 
   //every frame
@@ -123,6 +126,12 @@ class Game(var number_player: Int, var map_name: String) extends DesktopApplicat
       //IMPORTANT we need to tell the program to Flush the current SpriteBatch so that the textures are going to be rendered
       //or else they are staying in the cache and are rendered on the wrong screen
       g.sbFlush()
+    }
+
+    for (i <- boosts.indices) {
+      if (!boosts(i).undraw) {
+        boosts(i).draw(g)
+      }
     }
   }
 
@@ -206,6 +215,7 @@ class Game(var number_player: Int, var map_name: String) extends DesktopApplicat
   override def onKeyUp(keycode: Int): Unit = {
     keycode match {
       //player 1
+      case Input.Keys.E => players(debugPlayer).reset = false
       case Input.Keys.A => players(debugPlayer).driftLeft = false
       case Input.Keys.D => players(debugPlayer).driftRight = false
       case Input.Keys.W => players(debugPlayer).driveUp = 0f
@@ -213,6 +223,7 @@ class Game(var number_player: Int, var map_name: String) extends DesktopApplicat
       case Input.Keys.Q => players(debugPlayer).boost = false
 
       //player 2
+      case Input.Keys.O if number_player > 1 => players(1).reset = false
       case Input.Keys.J if number_player > 1 => players(1).driftLeft = false
       case Input.Keys.L if number_player > 1 => players(1).driftRight = false
       case Input.Keys.I if number_player > 1 => players(1).driveUp = 0f
@@ -220,6 +231,7 @@ class Game(var number_player: Int, var map_name: String) extends DesktopApplicat
       case Input.Keys.U if number_player > 1 => players(1).boost = false
 
       //player 3
+      case Input.Keys.Y if number_player > 2 => players(2).reset = false
       case Input.Keys.F if number_player > 2 => players(2).driftLeft = false
       case Input.Keys.H if number_player > 2 => players(2).driftRight = false
       case Input.Keys.T if number_player > 2 => players(2).driveUp = 0f
@@ -227,6 +239,7 @@ class Game(var number_player: Int, var map_name: String) extends DesktopApplicat
       case Input.Keys.R if number_player > 2 => players(2).boost = false
 
       //player 4
+      case Input.Keys.SHIFT_RIGHT if number_player > 3 => players(3).reset = false
       case Input.Keys.LEFT if number_player > 3 => players(3).driftLeft = false
       case Input.Keys.RIGHT if number_player > 3 => players(3).driftRight = false
       case Input.Keys.UP if number_player > 3 => players(3).driveUp = 0f
@@ -240,6 +253,7 @@ class Game(var number_player: Int, var map_name: String) extends DesktopApplicat
   override def onKeyDown(keycode: Int): Unit = {
     keycode match {
       //player 1
+      case Input.Keys.E => players(0).reset = true
       case Input.Keys.A => players(0).driftLeft = true
       case Input.Keys.D => players(0).driftRight = true
       case Input.Keys.W => players(0).driveUp = Car.MAX_THRUST
@@ -247,6 +261,7 @@ class Game(var number_player: Int, var map_name: String) extends DesktopApplicat
       case Input.Keys.Q => players(0).boost = true
 
       //player 2
+      case Input.Keys.O if number_player > 1 => players(1).reset = true
       case Input.Keys.J if number_player > 1 => players(1).driftLeft = true
       case Input.Keys.L if number_player > 1 => players(1).driftRight = true
       case Input.Keys.I if number_player > 1 => players(1).driveUp = Car.MAX_THRUST
@@ -254,6 +269,7 @@ class Game(var number_player: Int, var map_name: String) extends DesktopApplicat
       case Input.Keys.U if number_player > 1 => players(1).boost = true
 
       //player 3
+      case Input.Keys.Y if number_player > 2 => players(2).reset = true
       case Input.Keys.F if number_player > 2 => players(2).driftLeft = true
       case Input.Keys.H if number_player > 2 => players(2).driftRight = true
       case Input.Keys.T if number_player > 2 => players(2).driveUp = Car.MAX_THRUST
@@ -262,6 +278,7 @@ class Game(var number_player: Int, var map_name: String) extends DesktopApplicat
 
 
       //player 4
+      case Input.Keys.SHIFT_RIGHT if number_player > 3 => players(3).reset = true
       case Input.Keys.LEFT if number_player > 3 => players(3).driftLeft = true
       case Input.Keys.RIGHT if number_player > 3 => players(3).driftRight = true
       case Input.Keys.UP if number_player > 3 => players(3).driveUp = Car.MAX_THRUST
