@@ -32,11 +32,18 @@ class Game(var number_player: Int, var map_name: String) extends DesktopApplicat
   var debugPlayer = 0
   private var font: BitmapFont = _
   private var font2: BitmapFont = _
+  private var finished_time : Double = _
   var image_finished: BitmapImage = _
 
   //getting width and height for more visibility
   var width = Gdx.graphics.getWidth
   var height = Gdx.graphics.getHeight
+  var tab_timer : ArrayBuffer[Timer]= new ArrayBuffer[Timer]()
+  for(i<-0 until number_player){
+    var timer = new Timer
+    tab_timer.append(timer)
+  }
+
 
   override def onInit(): Unit = {
     setTitle(map_name)
@@ -81,7 +88,7 @@ class Game(var number_player: Int, var map_name: String) extends DesktopApplicat
     world.setContactListener(new GameContactListener)
 
     for (i <- 0 until number_player) {
-      players(i) = new Player(i, new Vector2(assets.createSpawnPlacementAndFinishForTheCar()(i)), checkpoints.length)
+      players(i) = new Player(i, new Vector2(assets.createSpawnPlacementAndFinishForTheCar()(i)), checkpoints.length,tab_timer(i))
     }
   }
 
@@ -154,7 +161,7 @@ class Game(var number_player: Int, var map_name: String) extends DesktopApplicat
         g.drawString(players(actualPlayer).pos.x+additionalheight, players(actualPlayer).pos.y+additionalwidth, timer1.getTime().toString, font)
       }
       else{
-        val finished_time = timer1.stopTime()
+         finished_time = players(actualPlayer).timer_player.stopTime()
         g.drawPicture(players(actualPlayer).pos.x, players(actualPlayer).pos.y, image_finished)
         g.drawString(players(actualPlayer).pos.x, players(actualPlayer).pos.y, finished_time.toString, font)
         g.drawString(players(actualPlayer).pos.x-500, players(actualPlayer).pos.y-100, "press escape to go back to menu", font2)
@@ -168,7 +175,7 @@ class Game(var number_player: Int, var map_name: String) extends DesktopApplicat
         g.drawString(players(actualPlayer).pos.x+additionalheight/2-100, players(actualPlayer).pos.y+additionalwidth, timer1.getTime().toString, font)
       }
       else {
-        val finished_time = timer1.stopTime()
+        finished_time = players(actualPlayer).timer_player.stopTime()
         g.drawPicture(players(actualPlayer).pos.x, players(actualPlayer).pos.y, image_finished)
         g.drawString(players(actualPlayer).pos.x, players(actualPlayer).pos.y, finished_time.toString, font)
         g.drawString(players(actualPlayer).pos.x-500, players(actualPlayer).pos.y-100, "press escape to go back to menu", font2)
@@ -182,7 +189,7 @@ class Game(var number_player: Int, var map_name: String) extends DesktopApplicat
         g.drawString(players(actualPlayer).pos.x+additionalheight/2-100, players(actualPlayer).pos.y+additionalwidth/2, timer1.getTime().toString, font)
       }
       else {
-        val finished_time = timer1.stopTime()
+         finished_time = players(actualPlayer).timer_player.stopTime()
         g.drawPicture(players(actualPlayer).pos.x, players(actualPlayer).pos.y, image_finished)
         g.drawString(players(actualPlayer).pos.x, players(actualPlayer).pos.y, finished_time.toString, font)
         g.drawString(players(actualPlayer).pos.x-500, players(actualPlayer).pos.y-100, "press escape to go back to menu", font2)

@@ -9,7 +9,7 @@ import com.badlogic.gdx.math.Vector2
 
 import scala.collection.mutable.ArrayBuffer
 
-class Player(var playerNbr : Int ,var position: Vector2, nCheckpoints: Int) extends PhysicsBox(playerNbr.toString, position, 150f, 45f, math.toRadians(90.0).toFloat){
+class Player(var playerNbr : Int ,var position: Vector2, nCheckpoints: Int, var timer_player: Timer) extends PhysicsBox(playerNbr.toString, position, 150f, 45f, math.toRadians(90.0).toFloat){
   var accelerate: Boolean = false
   val carImage = new BitmapImage("data/res/CARS/BLUECAR/blueCar" + (playerNbr + 1) + ".png")
   var driveUp = 0f
