@@ -213,7 +213,6 @@ class Menu() extends DesktopApplication(1920, 1080) {
   }
 
   override def onDispose(): Unit = {
-
     super.onDispose()
     stage.dispose()
     skin.dispose()

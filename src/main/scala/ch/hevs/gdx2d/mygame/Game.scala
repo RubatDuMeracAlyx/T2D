@@ -31,9 +31,6 @@ class Game(var number_player: Int, var map_name: String) extends DesktopApplicat
   var debugPlayer = 0
   private var font: BitmapFont = _
 
-  var viewP1 = new StretchViewport(800, 400)
-  var viewP2 = new StretchViewport(800, 400)
-
   override def onInit(): Unit = {
     setTitle(map_name)
     //loads the assets
@@ -64,7 +61,6 @@ class Game(var number_player: Int, var map_name: String) extends DesktopApplicat
     assets.createGrass()
     //install the SINGLE contact listener for the whole physics world
     world.setContactListener(new GameContactListener)
-    //creates the car (to change depending on player
 
     for (i <- 0 until number_player){
       players(i) = new Player(i,new Vector2(assets.createSpawnPlacementAndFinishForTheCar()(i)) , checkpoints.length)
@@ -78,20 +74,18 @@ class Game(var number_player: Int, var map_name: String) extends DesktopApplicat
     //updates physics
     PhysicsWorld.updatePhysics(Gdx.graphics.getDeltaTime)
 
-    //get windows size values
-    val camera = g.getCamera
-
     //player 1
-    //makes it so that it draws only on the left part of the screen
+    //makes it so that it draws only on the left part of the screen (left part)
     Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth/2, Gdx.graphics.getHeight)
     //moving camera on the first player
     g.moveCamera(players(0).getBodyPosition.x - 1920 / 2 * zoom, players(0).getBodyPosition.y - 1080 / 2 * zoom)
     g.zoom(zoom)
     //apply changes
-    camera.update()
+    g.getCamera.update()
 
     //draws the map seen from the first player viewpoint
-    mapsManager.render(camera)
+    mapsManager.render(g.getCamera)
+
     for (i <- 0 until number_player) {
       players(i).draw(g)
     }
@@ -105,12 +99,11 @@ class Game(var number_player: Int, var map_name: String) extends DesktopApplicat
     //player 2
     Gdx.gl.glViewport(Gdx.graphics.getWidth/2, 0, Gdx.graphics.getWidth/2, Gdx.graphics.getHeight)
 
-    val p2 = players(1)
-    g.moveCamera(p2.getBodyPosition.x - 1920 / 4 * zoom, p2.getBodyPosition.y - 1080 / 2 * zoom)
+    g.moveCamera(players(1).getBodyPosition.x - 1920 / 2 * zoom, players(1).getBodyPosition.y - 1080 / 2 * zoom)
     g.zoom(zoom)
-    camera.update()
+    g.getCamera.update()
 
-    mapsManager.render(camera)
+    mapsManager.render(g.getCamera)
     for (i <- 0 until number_player) {
       players(i).draw(g)
     }
