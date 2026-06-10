@@ -30,6 +30,9 @@ class Game(var number_player: Int, var map_name: String) extends DesktopApplicat
   var timer1 = new Timer()
   var debugPlayer = 0
   private var font: BitmapFont = _
+  //getting width and height for more visibility
+  var width = Gdx.graphics.getWidth
+  var height = Gdx.graphics.getHeight
 
   override def onInit(): Unit = {
     setTitle(map_name)
@@ -74,39 +77,48 @@ class Game(var number_player: Int, var map_name: String) extends DesktopApplicat
     //updates physics
     PhysicsWorld.updatePhysics(Gdx.graphics.getDeltaTime)
 
-    //player 1
-    //makes it so that it draws only on the left part of the screen (left part)
-    Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth/2, Gdx.graphics.getHeight)
-    //moving camera on the first player
-    g.moveCamera(players(0).getBodyPosition.x - 1920 / 2 * zoom, players(0).getBodyPosition.y - 1080 / 2 * zoom)
-    g.zoom(zoom)
-    //apply changes
-    g.getCamera.update()
-    //draws the map seen from the first player viewpoint
-    mapsManager.render(g.getCamera)
-
-    players(0).draw(g)
-    /*
     for (i <- 0 until number_player) {
-      players(i).draw(g)
-    }*/
+      //sending the current player that is rendered and the GdxGraphics screen so that it can change the camera accordingly
+      setupViewport(i, g)
+      //setting the camera on the player position
+      g.getCamera.position.set(players(i).getBodyPosition.x, players(i).getBodyPosition.y, 0)
+      //needs to update it in order for the camera to actually "move"
+      g.getCamera.update()
+      //drawing the map
+      mapsManager.render(g.getCamera)
+      //drawing all the players
+      for (j <- 0 until number_player) players(j).draw(g)
+      //IMPORTANT we need to tell the program to Flush the current SpriteBatch so that the textures are going to be rendered
+      //or else they are staying in the cache and are rendered on the wrong screen
+      g.sbFlush()
+    }
+  }
 
-    /*Tried to move the text where it's supposed to go but it appears to everyone
-    g.drawString(player(0).pos.x + 1820 - 150, player(0).pos.y + 980, timer1.getTime().toString, font)
-    g.drawString(player(0).pos.x + 1820 - 200, player(0).pos.y + 980 - 100, s"tour ${(p1.nDrivenLapsInClass + 1).toString}/3", font)
-    g.drawString(player(0).pos.x + 1820 - 200, player(0).pos.y + 980 - 200, s"${(p1.speed * 10).toInt} km/h", font)*/
-
-
-    //player 2
-    Gdx.gl.glViewport(Gdx.graphics.getWidth/2, 0, Gdx.graphics.getWidth/2, Gdx.graphics.getHeight)
-
-    g.moveCamera(players(1).getBodyPosition.x - 1920 / 2 * zoom, players(1).getBodyPosition.y - 1080 / 2 * zoom)
-    g.zoom(zoom)
-    g.getCamera.update()
-
-    mapsManager.render(g.getCamera)
-    for (i <- 0 until 1) {
-      players(i).draw(g)
+  def setupViewport(actualPlayer:Int, g:GdxGraphics): Unit = {
+    val width = Gdx.graphics.getWidth
+    val height = Gdx.graphics.getHeight
+    //this is the same for two players because we can just divide the same number by one or two
+    if(number_player == 1 || number_player == 2){
+      Gdx.gl.glViewport(actualPlayer * width/number_player, 0, width/number_player, height)
+      g.getCamera.setToOrtho(false, width * zoom/number_player, height * zoom)
+    }
+    //since the viewport line changes from 3 players we need to change it for each screen
+    else if(number_player == 3 || number_player == 4){
+      //first player to be rendered on a 4 screen formation and so on
+      if (actualPlayer == 0){
+        Gdx.gl.glViewport(0, height/2, width/2, height/2)
+      }
+      else if (actualPlayer == 1){
+        Gdx.gl.glViewport(width/2, height/2, width/2, height/2)
+      }
+      else if (actualPlayer == 2){
+        Gdx.gl.glViewport(0, 0, width/2, height/2)
+      }
+      else if (actualPlayer == 3){
+        Gdx.gl.glViewport(width/2, 0, width/2, height/2)
+      }
+      //and after we can set the camera because everyone has the same screen size
+      g.getCamera.setToOrtho(false, width/2 * zoom, height/2 * zoom)
     }
   }
 

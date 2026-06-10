@@ -128,8 +128,7 @@ class Player(var playerNbr : Int ,var position: Vector2, nCheckpoints: Int) exte
 
     //position of the car
     pos = this.getBodyPosition
-    //apply the speed
-    println(this)
+    //applies the speed
     g.drawAlphaPicture(pos.x, pos.y, this.getBodyAngleDeg, .5f, 1f, carImage)
   }
   def getDistanceVector(box:PhysicsBox):Float={
