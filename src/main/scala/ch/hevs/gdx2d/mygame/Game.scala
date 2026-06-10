@@ -255,7 +255,7 @@ class Game(var number_player: Int, var map_name: String) extends DesktopApplicat
       case Input.Keys.H if number_player > 2 => players(2).driftRight = true
       case Input.Keys.T if number_player > 2 => players(2).driveUp = Car.MAX_THRUST
       case Input.Keys.G if number_player > 2 => players(2).driveDown = Car.MAX_THRUST
-      case Input.Keys.R if number_player > 2 => println(keycode)
+      case Input.Keys.R if number_player > 2 => players(2).boost = true
 
 
       //player 4
