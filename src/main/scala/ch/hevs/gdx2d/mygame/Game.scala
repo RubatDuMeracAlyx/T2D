@@ -82,13 +82,14 @@ class Game(var number_player: Int, var map_name: String) extends DesktopApplicat
     g.zoom(zoom)
     //apply changes
     g.getCamera.update()
-
     //draws the map seen from the first player viewpoint
     mapsManager.render(g.getCamera)
 
+    players(0).draw(g)
+    /*
     for (i <- 0 until number_player) {
       players(i).draw(g)
-    }
+    }*/
 
     /*Tried to move the text where it's supposed to go but it appears to everyone
     g.drawString(player(0).pos.x + 1820 - 150, player(0).pos.y + 980, timer1.getTime().toString, font)
@@ -104,15 +105,9 @@ class Game(var number_player: Int, var map_name: String) extends DesktopApplicat
     g.getCamera.update()
 
     mapsManager.render(g.getCamera)
-    for (i <- 0 until number_player) {
+    for (i <- 0 until 1) {
       players(i).draw(g)
     }
-
-
-
-
-    Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth, Gdx.graphics.getHeight)
-
   }
 
   override def onKeyUp(keycode: Int): Unit = {
@@ -140,7 +135,6 @@ class Game(var number_player: Int, var map_name: String) extends DesktopApplicat
           var menu : Menu= new Menu()
           menu.launch()
         }).start()
-      //case Input.Keys.R => players(0).derapage = true
       case _ => ()
     }
   }
