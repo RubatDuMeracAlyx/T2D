@@ -115,14 +115,7 @@ class Game(var number_player: Int, var map_name: String) extends DesktopApplicat
       //or else they are staying in the cache and are rendered on the wrong screen
       g.sbFlush()
     }
-
-
-
-
-
-    }
-
-
+  }
 
   def setupViewport(actualPlayer: Int, g: GdxGraphics): Unit = {
     val width = Gdx.graphics.getWidth
@@ -201,23 +194,70 @@ class Game(var number_player: Int, var map_name: String) extends DesktopApplicat
 
   override def onKeyUp(keycode: Int): Unit = {
     keycode match {
-      case Input.Keys.LEFT => players(debugPlayer).driftLeft = false
-      case Input.Keys.RIGHT => players(debugPlayer).driftRight = false
-      case Input.Keys.UP => players(debugPlayer).driveUp = 0f
-      case Input.Keys.DOWN => players(debugPlayer).driveDown = 0f
-      case Input.Keys.SPACE => players(debugPlayer).boost = false
-      //case Input.Keys.R => players(0).derapage = false
+      //player 1
+      case Input.Keys.A => players(debugPlayer).driftLeft = false
+      case Input.Keys.D => players(debugPlayer).driftRight = false
+      case Input.Keys.W => players(debugPlayer).driveUp = 0f
+      case Input.Keys.S => players(debugPlayer).driveDown = 0f
+      case Input.Keys.Q => players(debugPlayer).boost = false
+
+      //player 2
+      case Input.Keys.J if number_player > 1 => players(1).driftLeft = false
+      case Input.Keys.L if number_player > 1 => players(1).driftRight = false
+      case Input.Keys.I if number_player > 1 => players(1).driveUp = 0f
+      case Input.Keys.K if number_player > 1 => players(1).driveDown = 0f
+      case Input.Keys.U if number_player > 1 => players(1).boost = false
+
+      //player 3
+      case Input.Keys.F if number_player > 2 => players(2).driftLeft = false
+      case Input.Keys.H if number_player > 2 => players(2).driftRight = false
+      case Input.Keys.T if number_player > 2 => players(2).driveUp = 0f
+      case Input.Keys.G if number_player > 2 => players(2).driveDown = 0f
+      case Input.Keys.R if number_player > 2 => players(2).boost = false
+
+      //player 4
+      case Input.Keys.LEFT if number_player > 3 => players(3).driftLeft = false
+      case Input.Keys.RIGHT if number_player > 3 => players(3).driftRight = false
+      case Input.Keys.UP if number_player > 3 => players(3).driveUp = 0f
+      case Input.Keys.DOWN if number_player > 3 => players(3).driveDown = 0f
+      case Input.Keys.ENTER if number_player > 3 => players(3).boost = false
+
       case _ => ()
     }
   }
 
   override def onKeyDown(keycode: Int): Unit = {
     keycode match {
-      case Input.Keys.LEFT => players(debugPlayer).driftLeft = true
-      case Input.Keys.RIGHT => players(debugPlayer).driftRight = true
-      case Input.Keys.UP => players(debugPlayer).driveUp = Car.MAX_THRUST
-      case Input.Keys.DOWN => players(debugPlayer).driveDown = Car.MAX_THRUST
-      case Input.Keys.SPACE => players(debugPlayer).boost = true
+      //player 1
+      case Input.Keys.A => players(0).driftLeft = true
+      case Input.Keys.D => players(0).driftRight = true
+      case Input.Keys.W => players(0).driveUp = Car.MAX_THRUST
+      case Input.Keys.S => players(0).driveDown = Car.MAX_THRUST
+      case Input.Keys.Q => players(0).boost = true
+
+      //player 2
+      case Input.Keys.J if number_player > 1 => players(1).driftLeft = true
+      case Input.Keys.L if number_player > 1 => players(1).driftRight = true
+      case Input.Keys.I if number_player > 1 => players(1).driveUp = Car.MAX_THRUST
+      case Input.Keys.K if number_player > 1 => players(1).driveDown = Car.MAX_THRUST
+      case Input.Keys.U if number_player > 1 => players(1).boost = true
+
+      //player 3
+      case Input.Keys.F if number_player > 2 => players(2).driftLeft = true
+      case Input.Keys.H if number_player > 2 => players(2).driftRight = true
+      case Input.Keys.T if number_player > 2 => players(2).driveUp = Car.MAX_THRUST
+      case Input.Keys.G if number_player > 2 => players(2).driveDown = Car.MAX_THRUST
+      case Input.Keys.R if number_player > 2 => println(keycode)
+
+
+      //player 4
+      case Input.Keys.LEFT if number_player > 3 => players(3).driftLeft = true
+      case Input.Keys.RIGHT if number_player > 3 => players(3).driftRight = true
+      case Input.Keys.UP if number_player > 3 => players(3).driveUp = Car.MAX_THRUST
+      case Input.Keys.DOWN if number_player > 3 => players(3).driveDown = Car.MAX_THRUST
+      case Input.Keys.ENTER if number_player > 3 => players(3).boost = true
+
+      //exit
       case Input.Keys.ESCAPE => Gdx.app.exit()
         new Thread(() => {
           Thread.sleep(400)
