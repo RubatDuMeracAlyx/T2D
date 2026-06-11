@@ -122,17 +122,20 @@ class Game(var number_player: Int, var map_name: String) extends DesktopApplicat
           players(j).draw(g)
         }
       }
+
+      for (i <- boosts.indices) {
+        if (!boosts(i).undraw) {
+          boosts(i).draw(g)
+        }
+      }
+
       display_hud(i,g)
       //IMPORTANT we need to tell the program to Flush the current SpriteBatch so that the textures are going to be rendered
       //or else they are staying in the cache and are rendered on the wrong screen
       g.sbFlush()
     }
 
-    for (i <- boosts.indices) {
-      if (!boosts(i).undraw) {
-        boosts(i).draw(g)
-      }
-    }
+
   }
 
   def setupViewport(actualPlayer: Int, g: GdxGraphics): Unit = {
@@ -181,6 +184,8 @@ class Game(var number_player: Int, var map_name: String) extends DesktopApplicat
       // la vitesse et les tour sont tout le tems affichés
       g.drawString(players(actualPlayer).pos.x+additionalheight, players(actualPlayer).pos.y+additionalwidth-100 , s"tour ${(players(actualPlayer).nDrivenLapsInClass+1).toString}/3", font)
       g.drawString(players(actualPlayer).pos.x+additionalheight, players(actualPlayer).pos.y+additionalwidth-200, s"${(players(actualPlayer).speed * 10).toInt} km/h", font)
+      g.drawString(players(actualPlayer).pos.x + additionalheight, players(actualPlayer).pos.y + additionalwidth - 300, s"Fuel : ${players(actualPlayer).fuel}", font)
+
     }
     if(number_player==2){
       if (players(actualPlayer).finished == false) {
@@ -195,6 +200,7 @@ class Game(var number_player: Int, var map_name: String) extends DesktopApplicat
 
       g.drawString(players(actualPlayer).pos.x+additionalheight/2-100 , players(actualPlayer).pos.y+additionalwidth-100, s"tour ${(players(actualPlayer).nDrivenLapsInClass+1).toString}/3", font)
       g.drawString(players(actualPlayer).pos.x+additionalheight/2-100, players(actualPlayer).pos.y+additionalwidth-200, s"${(players(actualPlayer).speed * 10).toInt} km/h", font)
+      g.drawString(players(actualPlayer).pos.x + additionalheight / 2 - 100, players(actualPlayer).pos.y + additionalwidth - 300, s"Fuel : ${players(actualPlayer).fuel}", font)
     }
     if(number_player==3 || number_player==4){
       if (players(actualPlayer).finished == false) {
@@ -209,6 +215,8 @@ class Game(var number_player: Int, var map_name: String) extends DesktopApplicat
 
       g.drawString(players(actualPlayer).pos.x+additionalheight/2-100, players(actualPlayer).pos.y+additionalwidth/2-100, s"tour ${(players(actualPlayer).nDrivenLapsInClass+1).toString}/3", font)
       g.drawString(players(actualPlayer).pos.x+additionalheight/2-100, players(actualPlayer).pos.y+additionalwidth/2-200, s"${(players(actualPlayer).speed * 10).toInt} km/h", font)
+      g.drawString(players(actualPlayer).pos.x + additionalheight / 2 - 100, players(actualPlayer).pos.y + additionalwidth / 2 - 300, s"Fuel : ${players(actualPlayer).fuel}", font)
+
     }
   }
 
