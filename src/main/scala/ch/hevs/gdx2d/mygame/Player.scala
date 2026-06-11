@@ -175,9 +175,9 @@ class Player(var playerNbr : Int ,var position: Vector2, nCheckpoints: Int, var 
 
 
 object Car {
-  var MAX_THRUST = 20f
-  var MAX_TORQUE = 0.5f
-  val DRAG_THRUST = 0.5f
+  var MAX_THRUST = 35f
+  var MAX_TORQUE = 0.45f
+  val DRAG_THRUST = 0.6f
   val DRAG_TORQUE = 1.3f
   val BoostValue = 105f
 
