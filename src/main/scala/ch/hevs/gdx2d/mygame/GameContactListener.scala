@@ -40,7 +40,7 @@ class GameContactListener extends ContactListener {
     self match {
       case p: Player =>
         other match {
-          case _: Sand =>
+          case _: Sand => // player when collision with sand
 
             if (begin) {
               p.onSand = false
@@ -50,7 +50,7 @@ class GameContactListener extends ContactListener {
               p.onSand = false
             }
 
-          case _: Grass =>
+          case _: Grass => // player when collision with grass
 
             if (begin) {
               p.onGrass = false
@@ -61,26 +61,26 @@ class GameContactListener extends ContactListener {
             }
 
 
-          case _: Wall =>
+          case _: Wall => // player when collision with wall
 
-          case lilCP: LittleCheckpoint =>
+          case lilCP: LittleCheckpoint => // player when collision with a LittleCheckpoint
             if (begin) {
               p.needStock = true
-              p.stateOfTheCheckpoint(lilCP.c.number) = true
+              p.stateOfTheCheckpoint(lilCP.c.number) = true // put the went though the checkpoint state related to the LittleCheckpoint to true
 
             }
             else {
               p.needStock = false
             }
 
-          case _: Finish =>
+          case _: Finish => // player when collision with the finish
             if (begin) {
               p.logicForTheFinishBloc(p.stateOfTheCheckpoint, p.nDrivenLapsInClass)
             }
 
-          case _: Player => ()
+          case _: Player => () // player when collision with another player
 
-          case b: Boost =>
+          case b: Boost => // player when collision with a boost bloc
             if (begin) {
               p.addBoost(b.amount)
               b.destroy()

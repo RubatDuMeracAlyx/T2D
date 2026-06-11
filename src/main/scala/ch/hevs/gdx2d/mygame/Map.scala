@@ -8,10 +8,10 @@ import com.badlogic.gdx.utils.Disposable
 
 import scala.collection.mutable.ArrayBuffer
 
-class Map(val mapName:String) extends Disposable {
+class Map(val mapName: String) extends Disposable {
   val manager: AssetManager = new AssetManager()
 
-  private val MAP_PATH  = "data/res/"+mapName+".tmx"
+  private val MAP_PATH = "data/res/" + mapName + ".tmx"
 
 
   def loadAll(): Unit = {
@@ -30,12 +30,12 @@ class Map(val mapName:String) extends Disposable {
   override def dispose(): Unit = {
     manager.dispose()
   }
-  
+
   //  val roadLayer = map.getLayers.get("road").asInstanceOf[TiledMapTileLayer]
   //  val sandLayer = map.getLayers.get("sand").asInstanceOf[TiledMapTileLayer]
 
 
-  def findCheckPointBlocksCoords(): ArrayBuffer[Vector2] = {
+  def findCheckPointBlocksCoords(): ArrayBuffer[Vector2] = { //Generating HitBoxes for the CP and stock their position in an ArrayBuffer
     val map: TiledMap = new TmxMapLoader().load(MAP_PATH)
     val checkpointLayer = map.getLayers.get("checkpoint").asInstanceOf[TiledMapTileLayer]
     val CheckPointBlocksCoords: ArrayBuffer[Vector2] = ArrayBuffer.empty
@@ -47,7 +47,7 @@ class Map(val mapName:String) extends Disposable {
       val cell = checkpointLayer.getCell(x, y)
       if (cell != null) {
 
-        val position = new Vector2(x , y)
+        val position = new Vector2(x, y)
 
         CheckPointBlocksCoords.append(position)
       }
@@ -55,34 +55,42 @@ class Map(val mapName:String) extends Disposable {
     CheckPointBlocksCoords
   }
 
-  def existingNeighbors(vec2 : Vector2, listOfVec2 : ArrayBuffer[Vector2]) : ArrayBuffer[Vector2] = {
-    var existingNeighbors : ArrayBuffer[Vector2] = ArrayBuffer.empty
-    val vec21 : Vector2 = new Vector2(vec2.x+1,vec2.y)
-    val vec22 : Vector2 = new Vector2(vec2.x-1,vec2.y)
-    val vec23 : Vector2 = new Vector2(vec2.x,vec2.y+1)
-    val vec24 : Vector2 = new Vector2(vec2.x,vec2.y-1)
+  def existingNeighbors(pos: Vector2, listOfVec2: ArrayBuffer[Vector2]): ArrayBuffer[Vector2] = { // Returns only the positions in the table that are close to pos1
+    var existingNeighbors: ArrayBuffer[Vector2] = ArrayBuffer.empty
+    val vec21: Vector2 = new Vector2(pos.x + 1, pos.y)
+    val vec22: Vector2 = new Vector2(pos.x - 1, pos.y)
+    val vec23: Vector2 = new Vector2(pos.x, pos.y + 1)
+    val vec24: Vector2 = new Vector2(pos.x, pos.y - 1)
 
-    for (i <- listOfVec2){
-      if (i.x == vec21.x && i.y == vec21.y){existingNeighbors.append(vec21)}
-      if (i.x == vec22.x && i.y == vec22.y){existingNeighbors.append(vec22)}
-      if (i.x == vec23.x && i.y == vec23.y){existingNeighbors.append(vec23)}
-      if (i.x == vec24.x && i.y == vec24.y){existingNeighbors.append(vec24)}
+    for (i <- listOfVec2) {
+      if (i.x == vec21.x && i.y == vec21.y) {
+        existingNeighbors.append(vec21)
+      }
+      if (i.x == vec22.x && i.y == vec22.y) {
+        existingNeighbors.append(vec22)
+      }
+      if (i.x == vec23.x && i.y == vec23.y) {
+        existingNeighbors.append(vec23)
+      }
+      if (i.x == vec24.x && i.y == vec24.y) {
+        existingNeighbors.append(vec24)
+      }
     }
     existingNeighbors
   }
 
-  def findEqualsIndex(vec : Vector2, arrVec : ArrayBuffer[Vector2]) : Int = {
-    val equalsIndex : ArrayBuffer[Int] = ArrayBuffer.empty
-    for (i <- arrVec.indices){
-      if (arrVec(i).x == vec.x && arrVec(i).y == vec.y){
+  def findEqualsIndex(pos: Vector2, listOfVec2: ArrayBuffer[Vector2]): Int = { // Returns the index of pos in listOfVec2, or -1 if not found
+    val equalsIndex: ArrayBuffer[Int] = ArrayBuffer.empty
+    for (i <- listOfVec2.indices) {
+      if (listOfVec2(i).x == pos.x && listOfVec2(i).y == pos.y) {
         return i
       }
     }
     -1
   }
 
-  def findCheckPoints(checkPointBlocks : ArrayBuffer[Vector2]): ArrayBuffer[ArrayBuffer[Vector2]] = {
-    val checkpoints : ArrayBuffer[ArrayBuffer[Vector2]] = ArrayBuffer.empty
+  def findCheckPoints(checkPointBlocks: ArrayBuffer[Vector2]): ArrayBuffer[ArrayBuffer[Vector2]] = { // Create all the checkpoint using the Class LittleCheckpoint
+    val checkpoints: ArrayBuffer[ArrayBuffer[Vector2]] = ArrayBuffer.empty
 
     while (checkPointBlocks.length != 0) {
       val checkpoint: ArrayBuffer[Vector2] = ArrayBuffer.empty
@@ -93,14 +101,14 @@ class Map(val mapName:String) extends Disposable {
       while (toExplore.nonEmpty) {
         val current = toExplore(0)
         toExplore.remove(0)
-        val neighbors = existingNeighbors(current,checkPointBlocks)
-        for (n <- neighbors){
+        val neighbors = existingNeighbors(current, checkPointBlocks)
+        for (n <- neighbors) {
           toExplore.append(n)
           checkpoint.append(n)
         }
         for (n <- neighbors) {
           val toDelete: Int = findEqualsIndex(n, checkPointBlocks)
-          if (toDelete != -1){
+          if (toDelete != -1) {
             checkPointBlocks.remove(toDelete)
           }
         }
@@ -112,14 +120,14 @@ class Map(val mapName:String) extends Disposable {
     checkpoints
   }
 
-  def createCheckPoints(checkpoints: ArrayBuffer[ArrayBuffer[Vector2]]): Unit = {
-    for(i <- 0 until checkpoints.length){
-      val number : Int = i
-      var cp : Checkpoint = new Checkpoint(checkpoints(i),number)
+  def createCheckPoints(checkpoints: ArrayBuffer[ArrayBuffer[Vector2]]): Unit = { // create instances of the class Checkpoint
+    for (i <- 0 until checkpoints.length) {
+      val number: Int = i
+      var cp: Checkpoint = new Checkpoint(checkpoints(i), number)
     }
   }
 
-  def createSpawnPlacementAndFinishForTheCar(): ArrayBuffer[Vector2] = {
+  def createSpawnPlacementAndFinishForTheCar(): ArrayBuffer[Vector2] = { //Generating HitBoxes for the finis and return the position where the car can spawn
 
     val map: TiledMap = new TmxMapLoader().load(MAP_PATH)
     val finishLayer = map.getLayers.get("finish").asInstanceOf[TiledMapTileLayer]
@@ -149,8 +157,8 @@ class Map(val mapName:String) extends Disposable {
     allSpawn
   }
 
-  def generateHitBoxes(): Unit = {
-    val map : TiledMap = new TmxMapLoader().load(MAP_PATH)
+  def generateHitBoxes(): Unit = { //Generating HitBoxes for the walls
+    val map: TiledMap = new TmxMapLoader().load(MAP_PATH)
     val wallLayer = map.getLayers.get("wall").asInstanceOf[TiledMapTileLayer]
 
     val mapWidth = wallLayer.getWidth
@@ -172,9 +180,9 @@ class Map(val mapName:String) extends Disposable {
     }
   }
 
-  def createNBoost(num : Int): Array[Boost] = {
+  def createNBoost(num: Int): Array[Boost] = { // Generating boost hitbox randomly on the map
 
-    val allBoost : Array[Boost] = Array.ofDim(num)
+    val allBoost: Array[Boost] = Array.ofDim(num)
 
     val map: TiledMap = new TmxMapLoader().load(MAP_PATH)
     val sandLayer = map.getLayers.get("sand").asInstanceOf[TiledMapTileLayer]
@@ -182,7 +190,7 @@ class Map(val mapName:String) extends Disposable {
     val mapWidth = sandLayer.getWidth
     val mapHeight = sandLayer.getHeight
 
-    for (i <- 0 until num){
+    for (i <- 0 until num) {
       val randomWidth = (math.random() * mapWidth).toInt
       val randomHeight = (math.random() * mapHeight).toInt
 
@@ -199,7 +207,7 @@ class Map(val mapName:String) extends Disposable {
     allBoost
   }
 
-  def createSand(): Unit = {
+  def createSand(): Unit = { //Generating HitBoxes for the Sand
     val map: TiledMap = new TmxMapLoader().load(MAP_PATH)
     val sandLayer = map.getLayers.get("sand").asInstanceOf[TiledMapTileLayer]
 
@@ -209,7 +217,7 @@ class Map(val mapName:String) extends Disposable {
     val mapWidth = sandLayer.getWidth
     val mapHeight = sandLayer.getHeight
 
-    var count : Int = 0
+    var count: Int = 0
 
     for (x <- 0 until mapWidth; y <- 0 until mapHeight) {
       val cell = sandLayer.getCell(x, y)
@@ -220,17 +228,17 @@ class Map(val mapName:String) extends Disposable {
       )
 
       if (cell != null) {
-        
+
         // Sensor: the car drives over the sand (no bounce) but the contact is
         // still reported to GameContactListener, which flips Player.onSand.
         val sand = new Sand(position, Map.tileWidth, Map.tileHeight)
         sand.setSensor(true)
       }
-      
+
     }
   }
 
-  def createGrass(): Unit = {
+  def createGrass(): Unit = { //Generating HitBoxes for the grass
     val map: TiledMap = new TmxMapLoader().load(MAP_PATH)
     val grassLayer = map.getLayers.get("grass").asInstanceOf[TiledMapTileLayer]
 
@@ -255,12 +263,9 @@ class Map(val mapName:String) extends Disposable {
         val grass = new Grass(position, Map.tileWidth, Map.tileHeight)
         grass.setSensor(true)
       }
-
     }
   }
 }
-
-
 
 
 object Map {

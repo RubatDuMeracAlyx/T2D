@@ -50,7 +50,7 @@ class Player(var playerNbr : Int ,var position: Vector2, nCheckpoints: Int, var 
     fuel = fuel + amount
   }
 
-  def wentThoughAllCP (checkpointState: ArrayBuffer[Boolean]) : Boolean = {
+  def wentThoughAllCP (checkpointState: ArrayBuffer[Boolean]) : Boolean = { // func that check if Player went though all CP
     var result : Boolean = true
 
     for (c <- checkpointState){
@@ -63,18 +63,16 @@ class Player(var playerNbr : Int ,var position: Vector2, nCheckpoints: Int, var 
   def logicForTheFinishBloc(checkpointState: ArrayBuffer[Boolean], nDrivenLapsInFunc: Int): Unit = {
     if (wentThoughAllCP(checkpointState) == true && nDrivenLapsInClass == 2){ // checking if the player went though every CP and if he did 3 laps
       finished = true
-      println("FINISHED!")
     }
     else if (wentThoughAllCP(checkpointState) == true){ // checking if the player went though every CP
-      nDrivenLapsInClass += 1
-      for (i <- checkpointState.indices){
+      nDrivenLapsInClass += 1 // add a lap if yes
+      for (i <- checkpointState.indices){ // put every checkpoint back to false
         checkpointState(i) = false
       }
-      println("lap " + nDrivenLapsInClass + " / 3")
     }
   }
 
-  def createTheStateOfTheCheckpoint (nCheckpoints : Int) : Unit= {
+  def createTheStateOfTheCheckpoint (nCheckpoints : Int) : Unit= { // func that create for the player
     for (i <- 0 until nCheckpoints){
       stateOfTheCheckpoint.append(false)
     }

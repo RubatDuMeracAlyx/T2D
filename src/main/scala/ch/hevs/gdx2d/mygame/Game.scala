@@ -91,7 +91,7 @@ class Game(var number_player: Int, var map_name: String) extends DesktopApplicat
     for (i <- 0 until number_player){
       players(i) = new Player(i,new Vector2(assets.createSpawnPlacementAndFinishForTheCar()(i*3)) , checkpoints.length, tab_timer(i))
     }
-    //generate 10 boost fuel
+    //generate nBoost amount of boost fuel on the map
     boosts = assets.createNBoost(nBoost)
   }
 
@@ -122,7 +122,7 @@ class Game(var number_player: Int, var map_name: String) extends DesktopApplicat
           players(j).draw(g)
         }
       }
-
+      // draw the boost on the map
       for (i <- boosts.indices) {
         if (!boosts(i).undraw) {
           boosts(i).draw(g)
