@@ -171,11 +171,11 @@ class Map(val mapName:String) extends Disposable {
       }
     }
   }
-  
+
   def createNBoost(num : Int): Array[Boost] = {
 
     val allBoost : Array[Boost] = Array.ofDim(num)
-    
+
     val map: TiledMap = new TmxMapLoader().load(MAP_PATH)
     val sandLayer = map.getLayers.get("sand").asInstanceOf[TiledMapTileLayer]
 

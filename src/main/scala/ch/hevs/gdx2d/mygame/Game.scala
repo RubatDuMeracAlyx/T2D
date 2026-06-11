@@ -23,7 +23,7 @@ class Game(var number_player: Int, var map_name: String) extends DesktopApplicat
   val mapsManager: MapsManager = new MapsManager
   //to move later (one for each player)
   private var players: Array[Player] = Array.ofDim(number_player)
-  private val nBoost : Int = 100
+  private val nBoost : Int = 50
   private var boosts : Array[Boost] = Array.ofDim(nBoost)
   //for the walls
   private var hitboxes: ArrayBuffer[PhysicsStaticBox] = ArrayBuffer[PhysicsStaticBox]()

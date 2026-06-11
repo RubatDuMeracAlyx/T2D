@@ -26,9 +26,9 @@ class Player(var playerNbr : Int ,var position: Vector2, nCheckpoints: Int, var 
   var nDrivenLapsInClass : Int = 0
   var finished : Boolean = false
   var onSand = false
-  val sandReductionFactor = 0.2f
+  val sandReductionFactor = 0.3f
   var onGrass = false
-  val grassReductionFactor = 0.1f
+  val grassReductionFactor = 0.2f
   var pos:Vector2 = _
   var stockVal : (Vector2,Vector2,Int,Float,Float) = stockForReset()
 
@@ -81,7 +81,7 @@ class Player(var playerNbr : Int ,var position: Vector2, nCheckpoints: Int, var 
   }
   
   def draw(g: GdxGraphics): Unit = {
-    
+
     if (needStock){
       stockVal = stockForReset()
       needStock = false
@@ -159,10 +159,6 @@ class Player(var playerNbr : Int ,var position: Vector2, nCheckpoints: Int, var 
       g.drawAlphaPicture(pos.x, pos.y, this.getBodyAngleDeg, .5f, 1f, carImage)
     }
     else {
-      this.applyBodyForceToCenter(
-        -(this.getBodyLinearVelocity.x * -DRAG_THRUST * speed),
-        -(this.getBodyLinearVelocity.y * -DRAG_THRUST * speed),
-        true)
       this.applyBodyForceToCenter(stockVal._1.x * -DRAG_THRUST * speed, stockVal._1.y * -DRAG_THRUST * speed, true)
       this.getBody.setLinearVelocity(0, 0)
       this.getBody.setAngularVelocity(0)

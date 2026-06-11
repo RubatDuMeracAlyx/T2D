@@ -5,7 +5,7 @@ import ch.hevs.gdx2d.components.physics.primitives.PhysicsBox
 import ch.hevs.gdx2d.lib.GdxGraphics
 import com.badlogic.gdx.math.Vector2
 
-class Boost (var boostNbr : Int ,var position: Vector2) extends PhysicsBox (boostNbr.toString, position, 150f, 150f, math.toRadians(90.0).toFloat){
+class Boost (var boostNbr : Int ,var position: Vector2) extends PhysicsBox (boostNbr.toString, position, 128f, 128f, 0f){
 
   var amount : Int = (math.random() * 50).toInt + 10
   var imageNum : Int = if (amount <= 20){1}else if (amount <= 40){2} else {3}
