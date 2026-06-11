@@ -61,7 +61,7 @@ class Player(var playerNbr : Int ,var position: Vector2, nCheckpoints: Int, var 
   }
 
   def logicForTheFinishBloc(checkpointState: ArrayBuffer[Boolean], nDrivenLapsInFunc: Int): Unit = {
-    if (wentThoughAllCP(checkpointState) == true && nDrivenLapsInClass == 3){ // checking if the player went though every CP and if he did 3 laps
+    if (wentThoughAllCP(checkpointState) == true && nDrivenLapsInClass == 2){ // checking if the player went though every CP and if he did 3 laps
       finished = true
       println("FINISHED!")
     }
