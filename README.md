@@ -1,10 +1,12 @@
 # Final semester project with gdx2d 
 
+<img width="1672" height="941" alt="MenuT2D" src="https://github.com/user-attachments/assets/2b704041-f40d-4e07-ab72-8e616a267744" />
+
 This project provides several demonstration programs and code examples made using the [gdx2d](https://isc-hei.github.io/gdx2d/) library.
 All the demos are destined to be run on a desktop. 
 The Javadoc of the gdx2d library [is available online](https://hevs-isi.github.io/gdx2d/javadoc/index.html).
 
-A short video demonstrates the game, [have a look at it here](https://youtu.be/pshk-cnAqoQ). 
+A short video demonstrates the game,[![Watch the video](https://img.youtube.com/vi/pshk-cnAqoQ/maxresdefault.jpg)](https://youtu.be/pshk-cnAqoQ)
 
 ## Install
 
@@ -20,6 +22,8 @@ To run the game:
 1. Go to `T2D/src/main/scala/ch.hevs.gdx2d.mygame/Menu`
 2. press play at the top of the screen
 3. Select the number of player and the map and enjoy !
+
+<img width="626" height="1044" alt="menu" src="https://github.com/user-attachments/assets/f8339c6a-dcdb-4563-9bb8-09f6abf5042d" />
 
 ## Keyboard
 
